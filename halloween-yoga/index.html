@@ -60,14 +60,20 @@
   .field { margin-bottom: 20px; }
   .field > label { display: block; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #EFE3CF; margin-bottom: 8px; }
 
-  .field input[type="text"], .field input[type="tel"], .field input[type="email"] {
+  .field input[type="text"], .field input[type="tel"], .field select {
     width: 100%; padding: 13px 16px; border-radius: 14px;
     border: 1.5px solid #EFE3CF; background: #FBF6EE; color: #141210;
     font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 600;
     outline: none; transition: border-color .2s, box-shadow .2s;
   }
   .field input::placeholder { color: #E8650E; opacity: 0.85; font-weight: 500; }
-  .field input:focus { border-color: #FF7A1A; box-shadow: 0 0 0 3px rgba(255,122,26,0.3); }
+  .field input:focus, .field select:focus { border-color: #FF7A1A; box-shadow: 0 0 0 3px rgba(255,122,26,0.3); }
+
+  .phone-row { display: flex; gap: 8px; }
+  .phone-row select { flex: 0 0 112px; appearance: none; -webkit-appearance: none; cursor: pointer; }
+  .phone-row input { flex: 1; min-width: 0; }
+  .field input.invalid { border-color: #ff4d2e; box-shadow: 0 0 0 3px rgba(255,77,46,0.35); }
+  .field-error { display: none; color: #FFB08A; font-size: 13px; font-weight: 600; margin-top: 6px; }
 
   .radio-group { display: flex; gap: 10px; }
   .radio-option { flex: 1; }
@@ -120,6 +126,12 @@
   .s-box strong { color: #FF7A1A; }
 
   .share-btn { margin-top: 12px; }
+
+  .s-logos { display: flex; align-items: center; justify-content: center; gap: 22px; margin-top: 28px; }
+  .s-logos img { width: 64px; height: 64px; object-fit: contain; }
+  /* El logo de Eventi e Luce es gris sobre transparente: va en un círculo crema como el de Vicky */
+  .s-logos .eventi { width: 64px; height: 64px; border-radius: 50%; background: #F7F3EE; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .s-logos .eventi img { width: 84px; height: 84px; max-width: none; }
 
   .cal-wrap { position: relative; margin-top: 22px; }
   .cal-picker {
@@ -178,13 +190,24 @@
         </div>
 
         <div class="field">
-          <label for="hw-email">Email</label>
-          <input type="email" id="hw-email" placeholder="tu@email.com" autocomplete="email" />
-        </div>
-
-        <div class="field">
           <label for="hw-whatsapp">Número de WhatsApp</label>
-          <input type="tel" id="hw-whatsapp" placeholder="+34 6XX XXX XXX" autocomplete="tel" />
+          <div class="phone-row">
+            <select id="hw-country" aria-label="Código de país">
+              <option value="+34" selected>🇪🇸 +34</option>
+              <option value="+54">🇦🇷 +54</option>
+              <option value="+39">🇮🇹 +39</option>
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+49">🇩🇪 +49</option>
+              <option value="+351">🇵🇹 +351</option>
+              <option value="+52">🇲🇽 +52</option>
+              <option value="+57">🇨🇴 +57</option>
+              <option value="+58">🇻🇪 +58</option>
+              <option value="+1">🇺🇸 +1</option>
+            </select>
+            <input type="tel" id="hw-whatsapp" inputmode="numeric" placeholder="612 345 678" autocomplete="tel-national" maxlength="15" />
+          </div>
+          <p class="field-error" id="hw-whatsapp-error"></p>
         </div>
 
         <div class="field">
@@ -289,6 +312,11 @@
         </div>
 
         <button class="submit-btn share-btn" onclick="hwShare()">Compártelo con tus amig@s 👻</button>
+
+        <div class="s-logos">
+          <img src="../vickydepalma.png" alt="Vicky De Palma" />
+          <span class="eventi"><img src="../eventieluce.png" alt="Eventi e Luce" /></span>
+        </div>
       </div>
     </div>
 
@@ -305,16 +333,53 @@
 // ⬇️ Pega aquí la URL de tu Apps Script de Halloween (termina en /exec)
 const SHEETS_URL = "https://script.google.com/macros/s/AKfycbzIJdYFOxs9VS8quhzMvx_SfGwv_kTEAPhXS9lA20keKvi8ljYOLCvX-EqXvf8gNawp_g/exec";
 
+const phoneRules = {
+  '+34':  { min: 9, max: 9,   pattern: /^[67]/,    hint: '9 dígitos, empieza por 6 o 7' },
+  '+54':  { min: 10, max: 10,                       hint: '10 dígitos' },
+  '+39':  { min: 9,  max: 10, pattern: /^3/,        hint: '9-10 dígitos, empieza por 3' },
+  '+33':  { min: 9,  max: 9,  pattern: /^[67]/,     hint: '9 dígitos, empieza por 6 o 7' },
+  '+44':  { min: 10, max: 10, pattern: /^7/,        hint: '10 dígitos, empieza por 7' },
+  '+49':  { min: 10, max: 11, pattern: /^1[5679]/, hint: '10-11 dígitos, empieza por 15, 16, 17 o 19' },
+  '+351': { min: 9,  max: 9,  pattern: /^9/,        hint: '9 dígitos, empieza por 9' },
+  '+52':  { min: 10, max: 10,                       hint: '10 dígitos' },
+  '+57':  { min: 10, max: 10, pattern: /^3/,        hint: '10 dígitos, empieza por 3' },
+  '+58':  { min: 10, max: 11,                       hint: '10-11 dígitos' },
+  '+1':   { min: 10, max: 10,                       hint: '10 dígitos' },
+};
+
+const hwWhatsapp = document.getElementById('hw-whatsapp');
+
+hwWhatsapp.addEventListener('input', () => {
+  hwWhatsapp.value = hwWhatsapp.value.replace(/[^\d\s]/g, '');
+  hwWhatsapp.classList.remove('invalid');
+  document.getElementById('hw-whatsapp-error').style.display = 'none';
+});
+
+function validatePhone() {
+  const digits = hwWhatsapp.value.replace(/\D/g, '');
+  const code = document.getElementById('hw-country').value;
+  const rule = phoneRules[code] || { min: 6, max: 15 };
+  if (digits.length < rule.min || digits.length > rule.max) return { digits: null, hint: rule.hint };
+  if (rule.pattern && !rule.pattern.test(digits)) return { digits: null, hint: rule.hint };
+  return { digits, hint: null };
+}
+
 async function hwSubmit() {
   const nombre = document.getElementById('hw-nombre').value.trim();
-  const email = document.getElementById('hw-email').value.trim();
-  const whatsapp = document.getElementById('hw-whatsapp').value.trim();
+  const countryCode = document.getElementById('hw-country').value;
+  const { digits: phoneDigits, hint: phoneHint } = validatePhone();
   const nivel = document.querySelector('input[name="hw-nivel"]:checked');
   const fotos = document.querySelector('input[name="hw-fotos"]:checked');
 
   if (!nombre) { alert('Por favor escribe tu nombre 🙂'); return; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Revisa tu email ✉️'); return; }
-  if (!whatsapp) { alert('Por favor añade tu número de WhatsApp 📱'); return; }
+  if (!phoneDigits) {
+    hwWhatsapp.classList.add('invalid');
+    const errEl = document.getElementById('hw-whatsapp-error');
+    errEl.textContent = phoneHint ? `Número no válido · ${phoneHint} 📱` : 'Revisa el número 📱';
+    errEl.style.display = 'block';
+    hwWhatsapp.focus();
+    return;
+  }
   if (!nivel) { alert('¿Cuál es tu nivel de yoga? 🧘'); return; }
   if (!fotos) { alert('Falta responder la pregunta sobre fotos 📸'); return; }
 
@@ -333,7 +398,7 @@ async function hwSubmit() {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ nombre, email, whatsapp, nivel: nivel.value, fotos: fotos.value })
+      body: JSON.stringify({ nombre, whatsapp: countryCode.slice(1) + ' ' + phoneDigits, nivel: nivel.value, fotos: fotos.value })
     });
     document.getElementById('hw-form').style.display = 'none';
     document.getElementById('hw-success').style.display = 'block';

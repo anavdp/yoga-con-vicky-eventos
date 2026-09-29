@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Halloween Yoga · Inscripción</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0e0c0a; }
+
+  .hw-wrap {
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(255,122,26,0.35) 0%, transparent 55%),
+      radial-gradient(ellipse at 100% 100%, rgba(239,227,207,0.12) 0%, transparent 50%),
+      linear-gradient(170deg, #1d1915 0%, #141210 60%, #0e0c0a 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .blob { position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none; }
+  .blob1 { width: 300px; height: 300px; background: #FF7A1A; opacity: 0.22; top: -90px; right: -90px; animation: breathe 7s ease-in-out infinite; }
+  .blob2 { width: 240px; height: 240px; background: #EFE3CF; opacity: 0.10; bottom: 40px; left: -80px; animation: breathe 9s ease-in-out infinite reverse; }
+  @keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+  .bat { position: absolute; font-size: 22px; pointer-events: none; opacity: 0.55; z-index: 1; animation: flutter 6s ease-in-out infinite; }
+  .bat1 { top: 60px; left: 8%; }
+  .bat2 { top: 130px; right: 10%; font-size: 16px; animation-delay: -2s; }
+  .bat3 { top: 38%; left: 4%; font-size: 14px; animation-delay: -4s; }
+  @keyframes flutter {
+    0%,100% { transform: translate(0,0) rotate(-6deg); }
+    25% { transform: translate(8px,-10px) rotate(4deg); }
+    50% { transform: translate(-4px,-16px) rotate(-3deg); }
+    75% { transform: translate(-8px,-6px) rotate(6deg); }
+  }
+
+  .inner { position: relative; z-index: 2; max-width: 500px; margin: 0 auto; padding: 32px 16px 44px; }
+  .back { display: inline-block; margin-bottom: 16px; color: #EFE3CF; opacity: .75; font-size: 13px; font-weight: 600; text-decoration: none; }
+  .back:hover { opacity: 1; color: #FF7A1A; }
+  .header { text-align: center; margin-bottom: 24px; }
+
+  .pumpkin { font-size: 54px; line-height: 1; display: block; margin-bottom: 6px; animation: glow 3s ease-in-out infinite; }
+  @keyframes glow {
+    0%,100% { filter: drop-shadow(0 0 14px rgba(255,122,26,0.6)); }
+    50% { filter: drop-shadow(0 0 26px rgba(255,122,26,0.95)); }
+  }
+
+  .kicker { font-size: 12px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #FF7A1A; margin: 0 0 4px; }
+  .title { font-family: 'Bebas Neue', 'Arial Black', sans-serif; font-size: 66px; line-height: 0.88; letter-spacing: 2px; color: #EFE3CF; text-shadow: 0 3px 24px rgba(255,122,26,0.25); }
+  .title span { color: #FF7A1A; }
+  .subtitle { font-size: 13px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #FFFFFF; opacity: 0.85; margin-top: 8px; }
+
+  .pills { display: flex; justify-content: center; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .pill { background: rgba(239,227,207,0.08); border: 1.5px solid rgba(239,227,207,0.35); border-radius: 100px; padding: 5px 14px; font-size: 12px; font-weight: 600; color: #EFE3CF; letter-spacing: 1px; }
+  .pill.accent { background: #FF7A1A; border-color: #FF7A1A; color: #141210; }
+
+  .card { background: rgba(239,227,207,0.07); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1.5px solid rgba(239,227,207,0.22); border-radius: 24px; padding: 28px 22px; margin-top: 20px; }
+
+  .field { margin-bottom: 20px; }
+  .field > label { display: block; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #EFE3CF; margin-bottom: 8px; }
+
+  .field input[type="text"], .field input[type="tel"], .field input[type="email"] {
+    width: 100%; padding: 13px 16px; border-radius: 14px;
+    border: 1.5px solid #EFE3CF; background: #FBF6EE; color: #141210;
+    font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 600;
+    outline: none; transition: border-color .2s, box-shadow .2s;
+  }
+  .field input::placeholder { color: #E8650E; opacity: 0.85; font-weight: 500; }
+  .field input:focus { border-color: #FF7A1A; box-shadow: 0 0 0 3px rgba(255,122,26,0.3); }
+
+  .radio-group { display: flex; gap: 10px; }
+  .radio-option { flex: 1; }
+  .radio-option input { display: none; }
+  .radio-option label {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    padding: 11px 8px; border-radius: 14px;
+    border: 1.5px solid rgba(239,227,207,0.3); background: rgba(239,227,207,0.06);
+    color: #EFE3CF; font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: all .18s; text-align: center; white-space: nowrap;
+  }
+  .radio-option label .emoji { font-size: 22px; line-height: 1; }
+  .radio-option label:hover { background: rgba(239,227,207,0.14); }
+  .radio-option input:checked + label { background: #FF7A1A; border-color: #FF7A1A; color: #141210; box-shadow: 0 0 20px rgba(255,122,26,0.4); }
+
+  .divider { height: 1px; background: rgba(239,227,207,0.18); margin: 22px 0; }
+
+  .submit-btn {
+    width: 100%; padding: 16px; border-radius: 16px;
+    border: 2px solid #FF7A1A; background: #141210; color: #FF7A1A;
+    font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 800; letter-spacing: 1px;
+    text-transform: uppercase; cursor: pointer; margin-top: 22px;
+    box-shadow: 0 0 18px rgba(255,122,26,0.25);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: transform .15s, box-shadow .15s, background .15s, color .15s;
+  }
+  .submit-btn:hover { transform: translateY(-2px); background: #FF7A1A; color: #141210; box-shadow: 0 8px 28px rgba(255,122,26,0.45); }
+  .submit-btn:disabled { opacity: .7; cursor: not-allowed; transform: none; }
+
+  .spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,122,26,0.3); border-top-color: #FF7A1A; border-radius: 50%; animation: spin .7s linear infinite; display: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error-msg { display: none; margin-top: 14px; padding: 10px 14px; border-radius: 12px; text-align: center; font-size: 13px; font-weight: 600; color: #EFE3CF; background: rgba(255,80,40,0.2); border: 1.5px solid rgba(255,122,26,0.5); }
+
+  .footer { text-align: center; margin-top: 18px; font-size: 12px; color: rgba(239,227,207,0.65); font-weight: 500; }
+  .footer a { color: #EFE3CF; font-weight: 700; text-decoration: none; border-bottom: 1.5px solid rgba(255,122,26,0.6); padding-bottom: 1px; }
+  .footer a:hover { border-color: #FF7A1A; color: #FFFFFF; }
+
+  .success { display: none; text-align: center; padding: 36px 8px; }
+  .success .icon { font-size: 56px; display: block; margin-bottom: 10px; }
+  .success .s-title { font-family: 'Bebas Neue', sans-serif; font-size: 44px; color: #FF7A1A; margin-bottom: 8px; letter-spacing: 1px; }
+  .success .s-msg { color: #EFE3CF; font-size: 15px; line-height: 1.55; }
+</style>
+</head>
+<body>
+<div class="hw-wrap">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <span class="bat bat1">🦇</span>
+  <span class="bat bat2">🦇</span>
+  <span class="bat bat3">🦇</span>
+
+  <div class="inner">
+    <a class="back" href="../">← Todos los eventos</a>
+
+    <div class="header">
+      <span class="pumpkin">🎃</span>
+      <p class="kicker">Clase especial</p>
+      <h1 class="title">Halloween <span>Yoga</span></h1>
+      <p class="subtitle">Edición de temporada</p>
+      <div class="pills">
+        <span class="pill accent">30 Octubre</span>
+        <span class="pill">📍 Las Tablas</span>
+        <span class="pill">🕯️ 6:30 PM</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div id="hw-form">
+        <div class="field">
+          <label for="hw-nombre">Nombre completo</label>
+          <input type="text" id="hw-nombre" placeholder="¿Cómo te llamas?" autocomplete="name" />
+        </div>
+
+        <div class="field">
+          <label for="hw-email">Email</label>
+          <input type="email" id="hw-email" placeholder="tu@email.com" autocomplete="email" />
+        </div>
+
+        <div class="field">
+          <label for="hw-whatsapp">Número de WhatsApp</label>
+          <input type="tel" id="hw-whatsapp" placeholder="+34 6XX XXX XXX" autocomplete="tel" />
+        </div>
+
+        <div class="field">
+          <label>Nivel de yoga</label>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" name="hw-nivel" id="hw-n1" value="Básico" />
+              <label for="hw-n1"><span class="emoji">👻</span>Básico</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="hw-nivel" id="hw-n2" value="Normal" />
+              <label for="hw-n2"><span class="emoji">🎃</span>Normal</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="hw-nivel" id="hw-n3" value="Pro" />
+              <label for="hw-n3"><span class="emoji">🧙‍♀️</span>Pro</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="field">
+          <label>¿Puedo publicar fotos del evento en donde aparezcas?</label>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" name="hw-fotos" id="hw-f1" value="Sí" />
+              <label for="hw-f1"><span class="emoji">📸</span>Sí, claro</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="hw-fotos" id="hw-f2" value="No" />
+              <label for="hw-f2"><span class="emoji">🫥</span>Prefiero no</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="error-msg" id="hw-error">😅 Algo salió mal, por favor inténtalo de nuevo.</div>
+
+        <button class="submit-btn" id="hw-btn" onclick="hwSubmit()">
+          <span id="hw-btn-text">¡Me apunto! 🎃</span>
+          <span class="spinner" id="hw-spinner"></span>
+        </button>
+      </div>
+
+      <div class="success" id="hw-success">
+        <span class="icon">🕸️</span>
+        <p class="s-title">¡Te esperamos!</p>
+        <p class="s-msg">Tu inscripción está confirmada y te hemos enviado un email.<br>Nos vemos el <strong>30 de octubre</strong> en <strong>Las Tablas</strong> a las <strong>6:30 PM</strong>.<br><br>¡Ven disfrazada si te atreves! 🧙‍♀️</p>
+      </div>
+    </div>
+
+    <p class="footer">
+      Organizado por
+      <a href="https://instagram.com/vicky.depalma" target="_blank" rel="noopener">@vicky.depalma</a>
+      ·
+      <a href="https://instagram.com/eventieluce" target="_blank" rel="noopener">@eventieluce</a>
+    </p>
+  </div>
+</div>
+
+<script>
+// ⬇️ Pega aquí la URL de tu Apps Script de Halloween (termina en /exec)
+const SHEETS_URL = "PEGA_AQUI_LA_URL_DE_APPS_SCRIPT";
+
+async function hwSubmit() {
+  const nombre = document.getElementById('hw-nombre').value.trim();
+  const email = document.getElementById('hw-email').value.trim();
+  const whatsapp = document.getElementById('hw-whatsapp').value.trim();
+  const nivel = document.querySelector('input[name="hw-nivel"]:checked');
+  const fotos = document.querySelector('input[name="hw-fotos"]:checked');
+
+  if (!nombre) { alert('Por favor escribe tu nombre 🙂'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Revisa tu email ✉️'); return; }
+  if (!whatsapp) { alert('Por favor añade tu número de WhatsApp 📱'); return; }
+  if (!nivel) { alert('¿Cuál es tu nivel de yoga? 🧘'); return; }
+  if (!fotos) { alert('Falta responder la pregunta sobre fotos 📸'); return; }
+
+  const btn = document.getElementById('hw-btn');
+  const btnText = document.getElementById('hw-btn-text');
+  const spinner = document.getElementById('hw-spinner');
+  const errorMsg = document.getElementById('hw-error');
+
+  btn.disabled = true;
+  btnText.textContent = 'Enviando...';
+  spinner.style.display = 'block';
+  errorMsg.style.display = 'none';
+
+  try {
+    await fetch(SHEETS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ nombre, email, whatsapp, nivel: nivel.value, fotos: fotos.value })
+    });
+    document.getElementById('hw-form').style.display = 'none';
+    document.getElementById('hw-success').style.display = 'block';
+  } catch (err) {
+    errorMsg.style.display = 'block';
+    btn.disabled = false;
+    btnText.textContent = '¡Me apunto! 🎃';
+    spinner.style.display = 'none';
+  }
+}
+</script>
+</body>
+</html>

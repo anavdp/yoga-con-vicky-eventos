@@ -143,6 +143,19 @@
    ========================================================= */
 const EVENTOS = [
   {
+    carpeta: "power-bootcamp",
+    activo: true,
+    emoji: "🥊",
+    tipo: "Edición otoño",
+    nombre: "Power Bootcamp",
+    fecha: "18 Octubre",
+    hora: "11:00 AM",
+    lugar: "El Retiro",
+    precio: "40 €",
+    boton: "¡Me apunto! 💜",
+    tema: "otono"
+  },
+  {
     carpeta: "halloween-yoga",
     activo: true,
     emoji: "🎃",
@@ -171,6 +184,12 @@ const EVENTOS = [
 
 /* Paletas de cada tema (puedes crear nuevas) */
 const TEMAS = {
+  otono: {
+    "--bg": "linear-gradient(160deg, #FDFBF7 0%, #F3ECF9 55%, #E6F4F3 100%)",
+    "--text": "#13345A", "--accent": "#9B7BC4", "--glow": "rgba(155,123,196,0.45)",
+    "--btn-bg": "#13345A", "--btn-text": "#FFFFFF", "--btn-border": "#13345A",
+    "--btn-hover-bg": "#9B7BC4", "--btn-hover-text": "#FFFFFF"
+  },
   halloween: {
     "--bg": "linear-gradient(160deg, #221e1a 0%, #141210 100%)",
     "--text": "#EFE3CF", "--accent": "#FF7A1A", "--glow": "rgba(255,122,26,0.45)",

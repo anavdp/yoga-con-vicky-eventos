@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Power Bootcamp · Inscripción</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #FBF8F2; }
+
+  /* Paleta del cartel: marino, lila, amarillo, turquesa y crema */
+  .pb-wrap {
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    color: #13345A;
+    background:
+      radial-gradient(ellipse at 100% 0%, rgba(155,123,196,0.30) 0%, transparent 50%),
+      radial-gradient(ellipse at 0% 100%, rgba(120,200,200,0.30) 0%, transparent 50%),
+      linear-gradient(170deg, #FDFBF7 0%, #FBF8F2 60%, #F6F1E8 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .blob { position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none; }
+  .blob1 { width: 300px; height: 300px; background: #C9B3E6; opacity: 0.45; top: -90px; right: -90px; animation: breathe 7s ease-in-out infinite; }
+  .blob2 { width: 240px; height: 240px; background: #A9DEDD; opacity: 0.45; bottom: 40px; left: -80px; animation: breathe 9s ease-in-out infinite reverse; }
+  @keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+  .leaf { position: absolute; font-size: 22px; pointer-events: none; opacity: 0.7; z-index: 1; animation: drift 7s ease-in-out infinite; }
+  .leaf1 { top: 60px; left: 8%; }
+  .leaf2 { top: 130px; right: 10%; font-size: 16px; animation-delay: -2s; }
+  .leaf3 { top: 38%; left: 4%; font-size: 14px; animation-delay: -4s; }
+  @keyframes drift {
+    0%,100% { transform: translate(0,0) rotate(-10deg); }
+    25% { transform: translate(8px,6px) rotate(8deg); }
+    50% { transform: translate(-4px,12px) rotate(-4deg); }
+    75% { transform: translate(-8px,4px) rotate(10deg); }
+  }
+
+  .inner { position: relative; z-index: 2; max-width: 500px; margin: 0 auto; padding: 32px 16px 44px; }
+  .back { display: inline-block; margin-bottom: 16px; color: #13345A; opacity: .7; font-size: 13px; font-weight: 600; text-decoration: none; }
+  .back:hover { opacity: 1; color: #8A68B8; }
+  .header { text-align: center; margin-bottom: 24px; }
+
+  .glove { font-size: 54px; line-height: 1; display: block; margin-bottom: 6px; animation: punch 3s ease-in-out infinite; }
+  @keyframes punch {
+    0%,100% { transform: scale(1) rotate(-6deg); filter: drop-shadow(0 6px 14px rgba(155,123,196,0.45)); }
+    50% { transform: scale(1.08) rotate(4deg); filter: drop-shadow(0 8px 22px rgba(155,123,196,0.75)); }
+  }
+
+  .kicker { font-size: 12px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #8A68B8; margin: 0 0 4px; }
+  .title { font-family: 'Bebas Neue', 'Arial Black', sans-serif; font-size: 66px; line-height: 0.88; letter-spacing: 2px; color: #13345A; }
+  .title span { color: #9B7BC4; }
+  .edition {
+    display: inline-block; margin-top: 10px; padding: 4px 14px; border-radius: 100px;
+    background: #F9E08B; color: #13345A; font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    transform: rotate(-2deg);
+  }
+
+  .info { margin-top: 12px; white-space: nowrap; font-size: clamp(11px, 3.4vw, 13px); font-weight: 600; letter-spacing: 0.5px; color: #13345A; }
+  .info .sep { color: #9B7BC4; margin: 0 6px; }
+
+  .card { background: rgba(255,255,255,0.72); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1.5px solid rgba(155,123,196,0.30); border-radius: 24px; padding: 28px 22px; margin-top: 20px; box-shadow: 0 14px 40px rgba(19,52,90,0.10); }
+
+  .field { margin-bottom: 20px; }
+  .field > label { display: block; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #13345A; margin-bottom: 8px; }
+
+  .field input[type="text"], .field input[type="tel"], .field select {
+    width: 100%; padding: 13px 16px; border-radius: 14px;
+    border: 1.5px solid #D9CCEB; background: #FFFFFF; color: #13345A;
+    font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 600;
+    outline: none; transition: border-color .2s, box-shadow .2s;
+  }
+  .field input::placeholder { color: #9B7BC4; opacity: 0.8; font-weight: 500; }
+  .field input:focus, .field select:focus { border-color: #9B7BC4; box-shadow: 0 0 0 3px rgba(155,123,196,0.25); }
+
+  .phone-row { display: flex; gap: 8px; }
+  .phone-row select { flex: 0 0 112px; appearance: none; -webkit-appearance: none; cursor: pointer; }
+  .phone-row input { flex: 1; min-width: 0; }
+  .field input.invalid { border-color: #E0533D; box-shadow: 0 0 0 3px rgba(224,83,61,0.25); }
+  .field-error { display: none; color: #C8412B; font-size: 13px; font-weight: 600; margin-top: 6px; }
+
+  .radio-group { display: flex; gap: 10px; }
+  .radio-option { flex: 1; }
+  .radio-option input { display: none; }
+  .radio-option label {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    padding: 11px 8px; border-radius: 14px;
+    border: 1.5px solid #D9CCEB; background: #F6F1FB;
+    color: #13345A; font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: all .18s; text-align: center; white-space: nowrap;
+  }
+  .radio-option label .emoji { font-size: 22px; line-height: 1; }
+  .radio-option label:hover { background: #EDE3F7; }
+  .radio-option input:checked + label { background: #9B7BC4; border-color: #9B7BC4; color: #FFFFFF; box-shadow: 0 6px 18px rgba(155,123,196,0.40); }
+
+  .divider { height: 1px; background: rgba(19,52,90,0.12); margin: 22px 0; }
+
+  .submit-btn {
+    width: 100%; padding: 16px; border-radius: 16px;
+    border: 2px solid #13345A; background: #13345A; color: #FFFFFF;
+    font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 800; letter-spacing: 1px;
+    text-transform: uppercase; cursor: pointer; margin-top: 22px;
+    box-shadow: 0 8px 22px rgba(19,52,90,0.25);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: transform .15s, box-shadow .15s, background .15s, color .15s;
+  }
+  .submit-btn:hover { transform: translateY(-2px); background: #1D4776; box-shadow: 0 10px 28px rgba(19,52,90,0.35); }
+  .submit-btn:disabled { opacity: .7; cursor: not-allowed; transform: none; }
+  .submit-btn.alt { background: #FFFFFF; color: #13345A; box-shadow: none; }
+  .submit-btn.alt:hover { background: #F6F1FB; }
+
+  .spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.35); border-top-color: #FFFFFF; border-radius: 50%; animation: spin .7s linear infinite; display: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error-msg { display: none; margin-top: 14px; padding: 10px 14px; border-radius: 12px; text-align: center; font-size: 13px; font-weight: 600; color: #8A2A1B; background: rgba(224,83,61,0.12); border: 1.5px solid rgba(224,83,61,0.45); }
+
+  .footer { text-align: center; margin-top: 18px; font-size: 12px; color: rgba(19,52,90,0.7); font-weight: 500; }
+  .footer a { color: #13345A; font-weight: 700; text-decoration: none; border-bottom: 1.5px solid #9B7BC4; padding-bottom: 1px; }
+  .footer a:hover { color: #8A68B8; }
+
+  .success { display: none; text-align: center; padding: 36px 8px; }
+  .success .icon { font-size: 56px; display: block; margin-bottom: 10px; }
+  .success .s-title { font-family: 'Bebas Neue', sans-serif; font-size: 44px; color: #13345A; margin-bottom: 8px; letter-spacing: 1px; }
+  .success .s-msg { color: #13345A; font-size: 15px; line-height: 1.55; }
+  .success a { color: #8A68B8; font-weight: 700; text-decoration: none; border-bottom: 1.5px solid rgba(155,123,196,0.6); }
+
+  .perks { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 22px; }
+  .perk { padding: 7px 12px; border-radius: 100px; font-size: 13px; font-weight: 600; color: #13345A; }
+  .perk:nth-child(1) { background: #D5EEEE; }
+  .perk:nth-child(2) { background: #EDE3F7; }
+  .perk:nth-child(3) { background: #FCEFC0; }
+
+  .s-box { margin-top: 18px; padding: 14px 16px; border-radius: 16px; background: #F6F1FB; border: 1.5px solid #D9CCEB; color: #13345A; font-size: 14px; line-height: 1.5; text-align: left; }
+  .s-box + .s-box { margin-top: 10px; }
+  .s-box strong { color: #13345A; }
+  .s-box.yellow { background: #FDF5D6; border-color: #F3DD86; }
+
+  .share-btn { margin-top: 12px; }
+
+  .s-logos { display: flex; align-items: center; justify-content: center; gap: 22px; margin-top: 28px; }
+  .s-logos img { width: 64px; height: 64px; object-fit: contain; }
+  /* El logo de Vicky es crema sobre transparente: va en un círculo marino para verse en fondo claro */
+  .s-logos .vicky { width: 64px; height: 64px; border-radius: 50%; background: #13345A; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .s-logos .vicky img { width: 52px; height: 52px; }
+  /* Provisional hasta tener el logo real de Clhoefit */
+  .s-logos .clhoefit {
+    width: 64px; height: 64px; border-radius: 50%; background: #1E9A9C; color: #FFFFFF;
+    border: 3px solid #D5EEEE; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 800; letter-spacing: 1px; line-height: 1.1;
+  }
+  .s-logos .clhoefit b { font-size: 18px; }
+
+  .cal-wrap { position: relative; margin-top: 22px; }
+  .cal-picker {
+    position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; z-index: 5;
+    background: #FFFFFF; border: 1.5px solid #D9CCEB; border-radius: 18px;
+    box-shadow: 0 12px 40px rgba(19,52,90,0.18);
+    overflow: hidden; transform-origin: bottom center;
+    animation: pickerIn 0.16s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes pickerIn {
+    from { opacity: 0; transform: scale(0.93) translateY(8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .cal-option {
+    display: flex; align-items: center; gap: 14px;
+    padding: 13px 18px; width: 100%; border: none;
+    background: transparent; cursor: pointer;
+    font-family: 'Poppins', sans-serif; font-size: 14px;
+    font-weight: 600; color: #13345A; text-align: left;
+    transition: background 0.12s;
+  }
+  .cal-option:not(:last-child) { border-bottom: 1px solid rgba(19,52,90,0.08); }
+  .cal-option:hover { background: #F6F1FB; }
+  .cal-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+  /* Móvil: encabezado y formulario más compactos para ver todo con poco scroll */
+  @media (max-width: 480px) {
+    .inner { padding: 14px 14px 28px; }
+    .back { margin-bottom: 4px; font-size: 12px; }
+    .header { margin-bottom: 14px; }
+    .glove { font-size: 34px; margin-bottom: 2px; }
+    .kicker { font-size: 11px; letter-spacing: 4px; margin-bottom: 2px; }
+    .title { font-size: 48px; }
+    .edition { margin-top: 6px; font-size: 11px; }
+    .info { margin-top: 8px; }
+    .card { padding: 18px 16px; margin-top: 0; }
+    .field { margin-bottom: 14px; }
+    .field > label { margin-bottom: 6px; font-size: 11px; }
+    .field input[type="text"], .field input[type="tel"], .field select { padding: 11px 14px; }
+    .radio-option label { padding: 8px 6px; }
+    .radio-option label .emoji { font-size: 18px; }
+    .divider { margin: 14px 0; }
+    .perks { margin-top: 14px; gap: 6px; }
+    .perk { font-size: 12px; padding: 6px 10px; }
+    .submit-btn { margin-top: 14px; padding: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="pb-wrap">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <span class="leaf leaf1">🍂</span>
+  <span class="leaf leaf2">🍁</span>
+  <span class="leaf leaf3">🍂</span>
+
+  <div class="inner">
+    <a class="back" href="../">← Todos los eventos</a>
+
+    <div class="header">
+      <span class="glove">🥊</span>
+      <p class="kicker">Powertribe Community</p>
+      <h1 class="title">Power <span>Bootcamp</span></h1>
+      <span class="edition">Edición otoño 🍂</span>
+      <p class="info">Dom 18 Octubre<span class="sep">·</span>11:00 AM<span class="sep">·</span>El Retiro<span class="sep">·</span>40 €</p>
+    </div>
+
+    <div class="card">
+      <div id="pb-form">
+        <div class="field">
+          <label for="pb-nombre">Nombre completo</label>
+          <input type="text" id="pb-nombre" placeholder="¿Cómo te llamas?" autocomplete="name" />
+        </div>
+
+        <div class="field">
+          <label for="pb-whatsapp">Número de WhatsApp</label>
+          <div class="phone-row">
+            <select id="pb-country" aria-label="Código de país">
+              <option value="+34" selected>🇪🇸 +34</option>
+              <option value="+54">🇦🇷 +54</option>
+              <option value="+39">🇮🇹 +39</option>
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+49">🇩🇪 +49</option>
+              <option value="+351">🇵🇹 +351</option>
+              <option value="+52">🇲🇽 +52</option>
+              <option value="+57">🇨🇴 +57</option>
+              <option value="+58">🇻🇪 +58</option>
+              <option value="+1">🇺🇸 +1</option>
+            </select>
+            <input type="tel" id="pb-whatsapp" inputmode="numeric" placeholder="612 345 678" autocomplete="tel-national" maxlength="15" />
+          </div>
+          <p class="field-error" id="pb-whatsapp-error"></p>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="field">
+          <label>¿Podemos publicar fotos del evento en donde aparezcas?</label>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" name="pb-fotos" id="pb-f1" value="Sí" />
+              <label for="pb-f1"><span class="emoji">📸</span>Sí, claro</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="pb-fotos" id="pb-f2" value="No" />
+              <label for="pb-f2"><span class="emoji">🙈</span>Prefiero no</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="perks">
+          <span class="perk">🏋️ Fullbody</span>
+          <span class="perk">🧘 Yoga</span>
+          <span class="perk">🥑 Brunch en comunidad</span>
+        </div>
+
+        <div class="error-msg" id="pb-error">😅 Algo salió mal, por favor inténtalo de nuevo.</div>
+
+        <button class="submit-btn" id="pb-btn" onclick="pbSubmit()">
+          <span id="pb-btn-text">Reserva tu plaza 💜</span>
+          <span class="spinner" id="pb-spinner"></span>
+        </button>
+      </div>
+
+      <div class="success" id="pb-success">
+        <span class="icon">💪</span>
+        <p class="s-title">¡Ya casi!</p>
+        <p class="s-msg">Tu plaza queda <strong>reservada</strong>. Te escribiremos por WhatsApp para el pago (<strong>40 €</strong>, Bizum o efectivo) y así confirmar tu lugar.</p>
+
+        <div class="s-box">
+          📅 <strong>Domingo 18 de octubre · 11:00 AM</strong><br>
+          📍 <a href="https://www.google.com/maps/search/?api=1&query=Casita+del+Pescador+Parque+del+Retiro+Madrid" target="_blank" rel="noopener">El Retiro, frente a la Casita del Pescador</a>
+        </div>
+        <div class="s-box yellow">
+          🧘 <strong>Trae tu esterilla, agua y ganas</strong>. Después, ¡brunch juntas! 🥑
+        </div>
+
+        <div class="cal-wrap" id="cal-wrap">
+            <div class="cal-picker" id="cal-picker" style="display:none;">
+              <button class="cal-option" onclick="calSelect('google')">
+                <span class="cal-icon" style="background:#fff; border:1.5px solid #e8e8e8;">
+                  <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.717v2.258h2.908C16.657 14.253 17.64 11.945 17.64 9.2z"/>
+                    <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258a5.37 5.37 0 0 1-8.009-2.452H.957v2.332A9 9 0 0 0 9 18z"/>
+                    <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.961H.957A9 9 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.329z"/>
+                    <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A9 9 0 0 0 .957 4.96l3.007 2.332C4.672 5.163 6.656 3.58 9 3.58z"/>
+                  </svg>
+                </span>
+                Google Calendar
+              </button>
+              <button class="cal-option" onclick="calSelect('apple')">
+                <span class="cal-icon" style="background:#FF3B30;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="5" width="18" height="16" rx="3" stroke="white" stroke-width="1.6" fill="rgba(255,255,255,0.15)"/>
+                    <path d="M3 10h18" stroke="white" stroke-width="1.6"/>
+                    <path d="M8 3v4M16 3v4" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+                    <text x="12" y="20" text-anchor="middle" font-size="7.5" font-weight="700" fill="white" font-family="sans-serif">18</text>
+                  </svg>
+                </span>
+                Apple Calendar
+              </button>
+              <button class="cal-option" onclick="calSelect('outlook')">
+                <span class="cal-icon" style="background:#0078D4;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="5" width="18" height="16" rx="3" stroke="white" stroke-width="1.6" fill="rgba(255,255,255,0.15)"/>
+                    <path d="M3 10h18" stroke="white" stroke-width="1.6"/>
+                    <path d="M8 3v4M16 3v4" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+                    <circle cx="8.5" cy="15.5" r="1.2" fill="white"/>
+                    <circle cx="12" cy="15.5" r="1.2" fill="white"/>
+                    <circle cx="15.5" cy="15.5" r="1.2" fill="white"/>
+                  </svg>
+                </span>
+                Outlook
+              </button>
+            </div>
+          <button class="submit-btn" onclick="toggleCalPicker(event)">📅 Añadir al calendario</button>
+        </div>
+
+        <button class="submit-btn alt share-btn" onclick="pbShare()">Compártelo con tus amig@s 💜</button>
+
+        <div class="s-logos">
+          <span class="vicky"><img src="../vickydepalma.png" alt="Vicky De Palma" /></span>
+          <span class="clhoefit" title="Clhoefit"><b>⚡</b>CLHOEFIT</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="footer">
+      Organizado por
+      <a href="https://instagram.com/vicky.depalma" target="_blank" rel="noopener">@vicky.depalma</a>
+      ·
+      <a href="https://instagram.com/clhoefit" target="_blank" rel="noopener">@clhoefit</a>
+    </p>
+  </div>
+</div>
+
+<script>
+// ⬇️ Pega aquí la URL de tu Apps Script del Power Bootcamp (termina en /exec)
+const SHEETS_URL = "PEGA_AQUI_LA_URL_DEL_APPS_SCRIPT";
+
+const phoneRules = {
+  '+34':  { min: 9, max: 9,   pattern: /^[67]/,    hint: '9 dígitos, empieza por 6 o 7' },
+  '+54':  { min: 10, max: 10,                       hint: '10 dígitos' },
+  '+39':  { min: 9,  max: 10, pattern: /^3/,        hint: '9-10 dígitos, empieza por 3' },
+  '+33':  { min: 9,  max: 9,  pattern: /^[67]/,     hint: '9 dígitos, empieza por 6 o 7' },
+  '+44':  { min: 10, max: 10, pattern: /^7/,        hint: '10 dígitos, empieza por 7' },
+  '+49':  { min: 10, max: 11, pattern: /^1[5679]/, hint: '10-11 dígitos, empieza por 15, 16, 17 o 19' },
+  '+351': { min: 9,  max: 9,  pattern: /^9/,        hint: '9 dígitos, empieza por 9' },
+  '+52':  { min: 10, max: 10,                       hint: '10 dígitos' },
+  '+57':  { min: 10, max: 10, pattern: /^3/,        hint: '10 dígitos, empieza por 3' },
+  '+58':  { min: 10, max: 11,                       hint: '10-11 dígitos' },
+  '+1':   { min: 10, max: 10,                       hint: '10 dígitos' },
+};
+
+const pbWhatsapp = document.getElementById('pb-whatsapp');
+
+pbWhatsapp.addEventListener('input', () => {
+  pbWhatsapp.value = pbWhatsapp.value.replace(/[^\d\s]/g, '');
+  pbWhatsapp.classList.remove('invalid');
+  document.getElementById('pb-whatsapp-error').style.display = 'none';
+});
+
+function validatePhone() {
+  const digits = pbWhatsapp.value.replace(/\D/g, '');
+  const code = document.getElementById('pb-country').value;
+  const rule = phoneRules[code] || { min: 6, max: 15 };
+  if (digits.length < rule.min || digits.length > rule.max) return { digits: null, hint: rule.hint };
+  if (rule.pattern && !rule.pattern.test(digits)) return { digits: null, hint: rule.hint };
+  return { digits, hint: null };
+}
+
+async function pbSubmit() {
+  const nombre = document.getElementById('pb-nombre').value.trim();
+  const countryCode = document.getElementById('pb-country').value;
+  const { digits: phoneDigits, hint: phoneHint } = validatePhone();
+  const fotos = document.querySelector('input[name="pb-fotos"]:checked');
+
+  if (!nombre) { alert('Por favor escribe tu nombre 🙂'); return; }
+  if (!phoneDigits) {
+    pbWhatsapp.classList.add('invalid');
+    const errEl = document.getElementById('pb-whatsapp-error');
+    errEl.textContent = phoneHint ? `Número no válido · ${phoneHint} 📱` : 'Revisa el número 📱';
+    errEl.style.display = 'block';
+    pbWhatsapp.focus();
+    return;
+  }
+  if (!fotos) { alert('Falta responder la pregunta sobre fotos 📸'); return; }
+
+  const btn = document.getElementById('pb-btn');
+  const btnText = document.getElementById('pb-btn-text');
+  const spinner = document.getElementById('pb-spinner');
+  const errorMsg = document.getElementById('pb-error');
+
+  btn.disabled = true;
+  btnText.textContent = 'Enviando...';
+  spinner.style.display = 'block';
+  errorMsg.style.display = 'none';
+
+  try {
+    await fetch(SHEETS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ nombre, whatsapp: countryCode.slice(1) + ' ' + phoneDigits, fotos: fotos.value })
+    });
+    document.getElementById('pb-form').style.display = 'none';
+    document.getElementById('pb-success').style.display = 'block';
+  } catch (err) {
+    errorMsg.style.display = 'block';
+    btn.disabled = false;
+    btnText.textContent = 'Reserva tu plaza 💜';
+    spinner.style.display = 'none';
+  }
+}
+
+// 18 oct 2026, 11:00–13:00 hora de Madrid (aún en horario de verano, UTC+2)
+const EV_START = '20261018T090000Z';
+const EV_END = '20261018T110000Z';
+const EV_TITLE = 'Power Bootcamp 🥊 Edición otoño';
+const EV_PLACE = 'Casita del Pescador, Parque del Retiro, Madrid';
+const EV_DESC = 'Clase especial al aire libre: entrenamiento fullbody, yoga y brunch en comunidad. Trae tu esterilla y agua 💜';
+
+function toggleCalPicker(e) {
+  e.stopPropagation();
+  const picker = document.getElementById('cal-picker');
+  if (picker.style.display !== 'none') {
+    picker.style.display = 'none';
+  } else {
+    picker.style.display = 'block';
+    picker.style.animation = 'none';
+    picker.offsetHeight;
+    picker.style.animation = '';
+  }
+}
+
+document.addEventListener('click', function(e) {
+  const wrap = document.getElementById('cal-wrap');
+  if (wrap && !wrap.contains(e.target)) {
+    document.getElementById('cal-picker').style.display = 'none';
+  }
+});
+
+function calSelect(type) {
+  document.getElementById('cal-picker').style.display = 'none';
+  const enc = encodeURIComponent;
+  if (type === 'google') {
+    window.open(
+      'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+      '&text=' + enc(EV_TITLE) +
+      '&dates=' + EV_START + '%2F' + EV_END +
+      '&details=' + enc(EV_DESC) +
+      '&location=' + enc(EV_PLACE),
+      '_blank', 'noopener'
+    );
+  } else if (type === 'outlook') {
+    window.open(
+      'https://outlook.live.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose&rru=addevent' +
+      '&subject=' + enc(EV_TITLE) +
+      '&startdt=2026-10-18T09%3A00%3A00Z&enddt=2026-10-18T11%3A00%3A00Z' +
+      '&location=' + enc(EV_PLACE) +
+      '&body=' + enc(EV_DESC),
+      '_blank', 'noopener'
+    );
+  } else {
+    const ics = [
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Power Bootcamp//ES',
+      'BEGIN:VEVENT',
+      'UID:power-bootcamp-2026@yogaconvicky',
+      'DTSTAMP:' + EV_START,
+      'DTSTART:' + EV_START, 'DTEND:' + EV_END,
+      'SUMMARY:' + EV_TITLE,
+      'LOCATION:' + EV_PLACE.replace(/,/g, '\\,'),
+      'DESCRIPTION:' + EV_DESC.replace(/,/g, '\\,'),
+      'END:VEVENT', 'END:VCALENDAR'
+    ].join('\r\n');
+    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'power-bootcamp.ics';
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a); URL.revokeObjectURL(url);
+  }
+}
+
+async function pbShare() {
+  const url = location.origin + location.pathname;
+  const text = '🥊 ¡Me apunté al Power Bootcamp edición otoño! Domingo 18 de octubre, 11:00 AM en El Retiro: fullbody, yoga y brunch en comunidad 💜 Apúntate aquí:';
+  if (navigator.share) {
+    try { await navigator.share({ title: 'Power Bootcamp', text, url }); } catch (err) {}
+    return;
+  }
+  window.open('https://wa.me/?text=' + encodeURIComponent(text + ' ' + url), '_blank', 'noopener');
+}
+</script>
+</body>
+</html>

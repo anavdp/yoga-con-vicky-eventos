@@ -52,8 +52,8 @@
   .title span { color: #FF7A1A; }
   .subtitle { font-size: 13px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #FFFFFF; opacity: 0.85; margin-top: 8px; }
 
-  .pills { display: flex; justify-content: center; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
-  .pill { background: rgba(239,227,207,0.08); border: 1.5px solid rgba(239,227,207,0.35); border-radius: 100px; padding: 5px 14px; font-size: 12px; font-weight: 600; color: #EFE3CF; letter-spacing: 1px; }
+  .pills { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-width: 300px; margin: 14px auto 0; }
+  .pill { text-align: center; white-space: nowrap; background: rgba(239,227,207,0.08); border: 1.5px solid rgba(239,227,207,0.35); border-radius: 100px; padding: 5px 14px; font-size: 12px; font-weight: 600; color: #EFE3CF; letter-spacing: 1px; }
   .pill.accent { background: #FF7A1A; border-color: #FF7A1A; color: #141210; }
 
   .card { background: rgba(239,227,207,0.07); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1.5px solid rgba(239,227,207,0.22); border-radius: 24px; padding: 28px 22px; margin-top: 20px; }
@@ -113,7 +113,7 @@
   .success .s-msg { color: #EFE3CF; font-size: 15px; line-height: 1.55; }
   .success a { color: #FF7A1A; font-weight: 700; text-decoration: none; border-bottom: 1.5px solid rgba(255,122,26,0.6); }
 
-  .costume { margin-top: 16px; padding: 12px 16px; border-radius: 16px; border: 1.5px dashed #FF7A1A; background: rgba(255,122,26,0.12); color: #EFE3CF; font-size: 14px; font-weight: 600; line-height: 1.45; }
+  .costume { text-align: center; margin-top: 22px; padding: 12px 16px; border-radius: 16px; border: 1.5px dashed #FF7A1A; background: rgba(255,122,26,0.12); color: #EFE3CF; font-size: 14px; font-weight: 600; line-height: 1.45; }
   .costume strong { color: #FF7A1A; }
 
   .s-box { margin-top: 18px; padding: 14px 16px; border-radius: 16px; background: rgba(239,227,207,0.08); border: 1.5px solid rgba(239,227,207,0.25); color: #EFE3CF; font-size: 14px; line-height: 1.5; text-align: left; }
@@ -144,10 +144,6 @@
         <span class="pill">📍 Las Tablas</span>
         <span class="pill">🕯️ 6:30 PM</span>
         <span class="pill">💶 20 €</span>
-      </div>
-      <div class="costume">
-        🎭 <strong>¡Ven con tu disfraz!</strong><br>
-        🏆 Habrá premio al mejor disfraz
       </div>
     </div>
 
@@ -202,6 +198,11 @@
           </div>
         </div>
 
+        <div class="costume">
+          🎭 <strong>¡Ven con tu disfraz!</strong><br>
+          🏆 Habrá premio al mejor disfraz
+        </div>
+
         <div class="error-msg" id="hw-error">😅 Algo salió mal, por favor inténtalo de nuevo.</div>
 
         <button class="submit-btn" id="hw-btn" onclick="hwSubmit()">
@@ -220,8 +221,7 @@
           📍 <a href="https://www.google.com/maps/search/?api=1&query=Calle+de+Puente+la+Reina+27+Madrid" target="_blank" rel="noopener">Calle de Puente la Reina, 27</a> (Las Tablas)
         </div>
         <div class="s-box">
-          🎭 <strong>¡Recuerda venir con tu disfraz!</strong><br>
-          🏆 Habrá premio al mejor disfraz.
+          🎭 <strong>¡Recuerda venir con tu disfraz!</strong>
         </div>
 
         <button class="submit-btn share-btn" onclick="hwShare()">Compártelo con tus amig@s 👻</button>

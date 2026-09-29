@@ -54,7 +54,6 @@
 
   .pills { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-width: 300px; margin: 14px auto 0; }
   .pill { text-align: center; white-space: nowrap; background: rgba(239,227,207,0.08); border: 1.5px solid rgba(239,227,207,0.35); border-radius: 100px; padding: 5px 14px; font-size: 12px; font-weight: 600; color: #EFE3CF; letter-spacing: 1px; }
-  .pill.accent { background: #FF7A1A; border-color: #FF7A1A; color: #141210; }
 
   .card { background: rgba(239,227,207,0.07); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1.5px solid rgba(239,227,207,0.22); border-radius: 24px; padding: 28px 22px; margin-top: 20px; }
 
@@ -164,7 +163,7 @@
       <h1 class="title">Halloween <span>Yoga</span></h1>
       <p class="subtitle">Edición de temporada</p>
       <div class="pills">
-        <span class="pill accent">30 Octubre</span>
+        <span class="pill">📅 30 Octubre</span>
         <span class="pill">📍 Las Tablas</span>
         <span class="pill">🕯️ 6:30 PM</span>
         <span class="pill">💶 20 €</span>
@@ -346,9 +345,9 @@ async function hwSubmit() {
   }
 }
 
-// 30 oct 2026, 18:30–20:00 hora de Madrid (ya en horario de invierno, UTC+1)
+// 30 oct 2026, 18:30–19:30 hora de Madrid (ya en horario de invierno, UTC+1)
 const EV_START = '20261030T173000Z';
-const EV_END = '20261030T190000Z';
+const EV_END = '20261030T183000Z';
 const EV_TITLE = 'Halloween Yoga 🎃';
 const EV_PLACE = 'Calle de Puente la Reina, 27, Madrid';
 const EV_DESC = 'Clase especial de Halloween Yoga. ¡Ven con tu disfraz, hay premio al mejor! 🏆';
@@ -389,7 +388,7 @@ function calSelect(type) {
     window.open(
       'https://outlook.live.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose&rru=addevent' +
       '&subject=' + enc(EV_TITLE) +
-      '&startdt=2026-10-30T17%3A30%3A00Z&enddt=2026-10-30T19%3A00%3A00Z' +
+      '&startdt=2026-10-30T17%3A30%3A00Z&enddt=2026-10-30T18%3A30%3A00Z' +
       '&location=' + enc(EV_PLACE) +
       '&body=' + enc(EV_DESC),
       '_blank', 'noopener'

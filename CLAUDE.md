@@ -28,3 +28,7 @@ Fields sent: `nombre`, `whatsapp` (formatted as `"countryCodeDigits localDigits"
 ## Development
 
 Open `index.html` directly in a browser — no server needed. To test the form submission end-to-end, a live Google Apps Script deployment is required (the `no-cors` fetch will silently succeed or fail based on network reachability).
+
+## Git workflow
+
+The repo owner is the only collaborator. Once changes have been discussed and agreed, commit and push directly to `main` — no feature branch or pull request needed.

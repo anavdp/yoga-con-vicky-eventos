@@ -66,12 +66,9 @@
   .event-kicker { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); }
   .event-name { font-family: 'Bebas Neue', sans-serif; font-size: 36px; line-height: .95; letter-spacing: 1px; }
 
-  .event-pills { position: relative; display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 18px; }
-  .pill {
-    font-size: 12px; font-weight: 600; letter-spacing: .5px;
-    padding: 5px 12px; border-radius: 100px;
-    border: 1.5px solid var(--pill-border); background: var(--pill-bg);
-  }
+  .event-info { position: relative; margin: 14px 0 18px; font-size: clamp(12px, 3.6vw, 14px); font-weight: 600; letter-spacing: .5px; }
+  .event-info .item { white-space: nowrap; }
+  .event-info .sep { color: var(--accent); margin: 0 6px; }
 
   .event-btn {
     position: relative; display: block; width: 100%; text-align: center; text-decoration: none;
@@ -140,7 +137,7 @@
 /* =========================================================
    LISTA DE EVENTOS
    Para añadir un evento: copia un bloque, cambia los datos
-   y pon "activo: true". Para cerrarlo, "activo: false"
+   y pon "activo: true". "precio" es opcional. Para cerrarlo, "activo: false"
    (pasa automáticamente a "Eventos pasados").
    "carpeta" es el nombre de la carpeta en el repo.
    ========================================================= */
@@ -154,6 +151,7 @@ const EVENTOS = [
     fecha: "30 Octubre",
     hora: "6:30 PM",
     lugar: "Las Tablas",
+    precio: "20 €",
     boton: "¡Me apunto! 🎃",
     tema: "halloween"
   },
@@ -176,14 +174,12 @@ const TEMAS = {
   halloween: {
     "--bg": "linear-gradient(160deg, #221e1a 0%, #141210 100%)",
     "--text": "#EFE3CF", "--accent": "#FF7A1A", "--glow": "rgba(255,122,26,0.45)",
-    "--pill-bg": "rgba(239,227,207,0.08)", "--pill-border": "rgba(239,227,207,0.3)",
     "--btn-bg": "#141210", "--btn-text": "#FF7A1A", "--btn-border": "#FF7A1A",
     "--btn-hover-bg": "#FF7A1A", "--btn-hover-text": "#141210"
   },
   verano: {
     "--bg": "linear-gradient(160deg, #FF6B47 0%, #FFD93D 40%, #4ECDC4 80%, #A8E6CF 100%)",
     "--text": "#FFFFFF", "--accent": "#FFFFFF", "--glow": "rgba(255,217,61,0.6)",
-    "--pill-bg": "rgba(255,255,255,0.25)", "--pill-border": "rgba(255,255,255,0.55)",
     "--btn-bg": "#FFFFFF", "--btn-text": "#E05A30", "--btn-border": "#FFFFFF",
     "--btn-hover-bg": "#FFF4E8", "--btn-hover-text": "#E05A30"
   }
@@ -210,11 +206,7 @@ if (activos.length === 0) {
           <h3 class="event-name">${esc(e.nombre)}</h3>
         </div>
       </div>
-      <div class="event-pills">
-        <span class="pill">📅 ${esc(e.fecha)}</span>
-        <span class="pill">🕐 ${esc(e.hora)}</span>
-        <span class="pill">📍 ${esc(e.lugar)}</span>
-      </div>
+      <p class="event-info">${[e.fecha, e.hora, e.lugar, e.precio].filter(Boolean).map(x => `<span class="item">${esc(x)}</span>`).join('<span class="sep">·</span><wbr>')}</p>
       <a class="event-btn" href="./${encodeURIComponent(e.carpeta)}/">${esc(e.boton)}</a>`;
     activeEl.appendChild(card);
   });

@@ -52,9 +52,8 @@
   .title span { color: #FF7A1A; }
   .subtitle { font-size: 13px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #FFFFFF; opacity: 0.85; margin-top: 8px; }
 
-  .pills { display: flex; justify-content: center; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
-  .pill { background: rgba(239,227,207,0.08); border: 1.5px solid rgba(239,227,207,0.35); border-radius: 100px; padding: 5px 14px; font-size: 12px; font-weight: 600; color: #EFE3CF; letter-spacing: 1px; }
-  .pill.accent { background: #FF7A1A; border-color: #FF7A1A; color: #141210; }
+  .pills { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-width: 300px; margin: 14px auto 0; }
+  .pill { text-align: center; white-space: nowrap; background: rgba(239,227,207,0.08); border: 1.5px solid rgba(239,227,207,0.35); border-radius: 100px; padding: 5px 14px; font-size: 12px; font-weight: 600; color: #EFE3CF; letter-spacing: 1px; }
 
   .card { background: rgba(239,227,207,0.07); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1.5px solid rgba(239,227,207,0.22); border-radius: 24px; padding: 28px 22px; margin-top: 20px; }
 
@@ -111,6 +110,40 @@
   .success .icon { font-size: 56px; display: block; margin-bottom: 10px; }
   .success .s-title { font-family: 'Bebas Neue', sans-serif; font-size: 44px; color: #FF7A1A; margin-bottom: 8px; letter-spacing: 1px; }
   .success .s-msg { color: #EFE3CF; font-size: 15px; line-height: 1.55; }
+  .success a { color: #FF7A1A; font-weight: 700; text-decoration: none; border-bottom: 1.5px solid rgba(255,122,26,0.6); }
+
+  .costume { text-align: center; margin-top: 22px; padding: 12px 16px; border-radius: 16px; border: 1.5px dashed #FF7A1A; background: rgba(255,122,26,0.12); color: #EFE3CF; font-size: 14px; font-weight: 600; line-height: 1.45; }
+  .costume strong { color: #FF7A1A; }
+
+  .s-box { margin-top: 18px; padding: 14px 16px; border-radius: 16px; background: rgba(239,227,207,0.08); border: 1.5px solid rgba(239,227,207,0.25); color: #EFE3CF; font-size: 14px; line-height: 1.5; text-align: left; }
+  .s-box + .s-box { margin-top: 10px; }
+  .s-box strong { color: #FF7A1A; }
+
+  .share-btn { margin-top: 12px; }
+
+  .cal-wrap { position: relative; margin-top: 22px; }
+  .cal-picker {
+    position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; z-index: 5;
+    background: #1d1915; border: 1.5px solid rgba(255,122,26,0.6); border-radius: 18px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 18px rgba(255,122,26,0.2);
+    overflow: hidden; transform-origin: bottom center;
+    animation: pickerIn 0.16s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes pickerIn {
+    from { opacity: 0; transform: scale(0.93) translateY(8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .cal-option {
+    display: flex; align-items: center; gap: 14px;
+    padding: 13px 18px; width: 100%; border: none;
+    background: transparent; cursor: pointer;
+    font-family: 'Poppins', sans-serif; font-size: 14px;
+    font-weight: 600; color: #EFE3CF; text-align: left;
+    transition: background 0.12s;
+  }
+  .cal-option:not(:last-child) { border-bottom: 1px solid rgba(239,227,207,0.12); }
+  .cal-option:hover { background: rgba(255,122,26,0.15); }
+  .cal-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -130,9 +163,10 @@
       <h1 class="title">Halloween <span>Yoga</span></h1>
       <p class="subtitle">Edición de temporada</p>
       <div class="pills">
-        <span class="pill accent">30 Octubre</span>
+        <span class="pill">📅 30 Octubre</span>
         <span class="pill">📍 Las Tablas</span>
         <span class="pill">🕯️ 6:30 PM</span>
+        <span class="pill">💶 20 €</span>
       </div>
     </div>
 
@@ -187,6 +221,11 @@
           </div>
         </div>
 
+        <div class="costume">
+          🎭 <strong>¡Ven con tu disfraz!</strong><br>
+          🏆 Habrá premio al mejor disfraz
+        </div>
+
         <div class="error-msg" id="hw-error">😅 Algo salió mal, por favor inténtalo de nuevo.</div>
 
         <button class="submit-btn" id="hw-btn" onclick="hwSubmit()">
@@ -197,8 +236,59 @@
 
       <div class="success" id="hw-success">
         <span class="icon">🕸️</span>
-        <p class="s-title">¡Te esperamos!</p>
-        <p class="s-msg">Tu inscripción está confirmada y te hemos enviado un email.<br>Nos vemos el <strong>30 de octubre</strong> en <strong>Las Tablas</strong> a las <strong>6:30 PM</strong>.<br><br>¡Ven disfrazada si te atreves! 🧙‍♀️</p>
+        <p class="s-title">¡Ya casi!</p>
+        <p class="s-msg">Tu plaza queda <strong>reservada</strong>. Te escribiremos por WhatsApp para el pago (<strong>20 €</strong>, Bizum o efectivo) y así confirmar tu lugar.</p>
+
+        <div class="s-box">
+          📅 <strong>30 de octubre · 6:30 PM</strong><br>
+          📍 <a href="https://www.google.com/maps/search/?api=1&query=Calle+de+Puente+la+Reina+27+Madrid" target="_blank" rel="noopener">Calle de Puente la Reina, 27</a> (Las Tablas)
+        </div>
+        <div class="s-box">
+          🎭 <strong>¡Recuerda venir con tu disfraz!</strong>
+        </div>
+
+        <div class="cal-wrap" id="cal-wrap">
+            <div class="cal-picker" id="cal-picker" style="display:none;">
+              <button class="cal-option" onclick="calSelect('google')">
+                <span class="cal-icon" style="background:#fff; border:1.5px solid #e8e8e8;">
+                  <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.717v2.258h2.908C16.657 14.253 17.64 11.945 17.64 9.2z"/>
+                    <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258a5.37 5.37 0 0 1-8.009-2.452H.957v2.332A9 9 0 0 0 9 18z"/>
+                    <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.961H.957A9 9 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.329z"/>
+                    <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A9 9 0 0 0 .957 4.96l3.007 2.332C4.672 5.163 6.656 3.58 9 3.58z"/>
+                  </svg>
+                </span>
+                Google Calendar
+              </button>
+              <button class="cal-option" onclick="calSelect('apple')">
+                <span class="cal-icon" style="background:#FF3B30;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="5" width="18" height="16" rx="3" stroke="white" stroke-width="1.6" fill="rgba(255,255,255,0.15)"/>
+                    <path d="M3 10h18" stroke="white" stroke-width="1.6"/>
+                    <path d="M8 3v4M16 3v4" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+                    <text x="12" y="20" text-anchor="middle" font-size="7.5" font-weight="700" fill="white" font-family="sans-serif">30</text>
+                  </svg>
+                </span>
+                Apple Calendar
+              </button>
+              <button class="cal-option" onclick="calSelect('outlook')">
+                <span class="cal-icon" style="background:#0078D4;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="5" width="18" height="16" rx="3" stroke="white" stroke-width="1.6" fill="rgba(255,255,255,0.15)"/>
+                    <path d="M3 10h18" stroke="white" stroke-width="1.6"/>
+                    <path d="M8 3v4M16 3v4" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+                    <circle cx="8.5" cy="15.5" r="1.2" fill="white"/>
+                    <circle cx="12" cy="15.5" r="1.2" fill="white"/>
+                    <circle cx="15.5" cy="15.5" r="1.2" fill="white"/>
+                  </svg>
+                </span>
+                Outlook
+              </button>
+            </div>
+          <button class="submit-btn" onclick="toggleCalPicker(event)">📅 Añadir al calendario</button>
+        </div>
+
+        <button class="submit-btn share-btn" onclick="hwShare()">Compártelo con tus amig@s 👻</button>
       </div>
     </div>
 
@@ -253,6 +343,85 @@ async function hwSubmit() {
     btnText.textContent = '¡Me apunto! 🎃';
     spinner.style.display = 'none';
   }
+}
+
+// 30 oct 2026, 18:30–19:30 hora de Madrid (ya en horario de invierno, UTC+1)
+const EV_START = '20261030T173000Z';
+const EV_END = '20261030T183000Z';
+const EV_TITLE = 'Halloween Yoga 🎃';
+const EV_PLACE = 'Calle de Puente la Reina, 27, Madrid';
+const EV_DESC = 'Clase especial de Halloween Yoga. ¡Ven con tu disfraz, hay premio al mejor! 🏆';
+
+function toggleCalPicker(e) {
+  e.stopPropagation();
+  const picker = document.getElementById('cal-picker');
+  if (picker.style.display !== 'none') {
+    picker.style.display = 'none';
+  } else {
+    picker.style.display = 'block';
+    picker.style.animation = 'none';
+    picker.offsetHeight;
+    picker.style.animation = '';
+  }
+}
+
+document.addEventListener('click', function(e) {
+  const wrap = document.getElementById('cal-wrap');
+  if (wrap && !wrap.contains(e.target)) {
+    document.getElementById('cal-picker').style.display = 'none';
+  }
+});
+
+function calSelect(type) {
+  document.getElementById('cal-picker').style.display = 'none';
+  const enc = encodeURIComponent;
+  if (type === 'google') {
+    window.open(
+      'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+      '&text=' + enc(EV_TITLE) +
+      '&dates=' + EV_START + '%2F' + EV_END +
+      '&details=' + enc(EV_DESC) +
+      '&location=' + enc(EV_PLACE),
+      '_blank', 'noopener'
+    );
+  } else if (type === 'outlook') {
+    window.open(
+      'https://outlook.live.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose&rru=addevent' +
+      '&subject=' + enc(EV_TITLE) +
+      '&startdt=2026-10-30T17%3A30%3A00Z&enddt=2026-10-30T18%3A30%3A00Z' +
+      '&location=' + enc(EV_PLACE) +
+      '&body=' + enc(EV_DESC),
+      '_blank', 'noopener'
+    );
+  } else {
+    const ics = [
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Halloween Yoga//ES',
+      'BEGIN:VEVENT',
+      'UID:halloween-yoga-2026@yogaconvicky',
+      'DTSTAMP:' + EV_START,
+      'DTSTART:' + EV_START, 'DTEND:' + EV_END,
+      'SUMMARY:' + EV_TITLE,
+      'LOCATION:' + EV_PLACE.replace(/,/g, '\\,'),
+      'DESCRIPTION:' + EV_DESC.replace(/,/g, '\\,'),
+      'END:VEVENT', 'END:VCALENDAR'
+    ].join('\r\n');
+    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'halloween-yoga.ics';
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a); URL.revokeObjectURL(url);
+  }
+}
+
+async function hwShare() {
+  const url = location.origin + location.pathname;
+  const text = '🎃 ¡Me apunté a Halloween Yoga! 30 de octubre, 6:30 PM en Las Tablas. Ven con tu disfraz, ¡hay premio al mejor! 🏆 Apúntate aquí:';
+  if (navigator.share) {
+    try { await navigator.share({ title: 'Halloween Yoga', text, url }); } catch (err) {}
+    return;
+  }
+  window.open('https://wa.me/?text=' + encodeURIComponent(text + ' ' + url), '_blank', 'noopener');
 }
 </script>
 </body>

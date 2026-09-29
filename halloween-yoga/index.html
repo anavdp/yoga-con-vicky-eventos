@@ -50,10 +50,9 @@
   .kicker { font-size: 12px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #FF7A1A; margin: 0 0 4px; }
   .title { font-family: 'Bebas Neue', 'Arial Black', sans-serif; font-size: 66px; line-height: 0.88; letter-spacing: 2px; color: #EFE3CF; text-shadow: 0 3px 24px rgba(255,122,26,0.25); }
   .title span { color: #FF7A1A; }
-  .subtitle { font-size: 13px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #FFFFFF; opacity: 0.85; margin-top: 8px; }
 
-  .pills { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-width: 300px; margin: 14px auto 0; }
-  .pill { text-align: center; white-space: nowrap; background: rgba(239,227,207,0.08); border: 1.5px solid rgba(239,227,207,0.35); border-radius: 100px; padding: 5px 14px; font-size: 12px; font-weight: 600; color: #EFE3CF; letter-spacing: 1px; }
+  .info { margin-top: 12px; white-space: nowrap; font-size: clamp(11px, 3.4vw, 13px); font-weight: 600; letter-spacing: 0.5px; color: #EFE3CF; }
+  .info .sep { color: #FF7A1A; margin: 0 6px; }
 
   .card { background: rgba(239,227,207,0.07); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1.5px solid rgba(239,227,207,0.22); border-radius: 24px; padding: 28px 22px; margin-top: 20px; }
 
@@ -156,6 +155,26 @@
   .cal-option:not(:last-child) { border-bottom: 1px solid rgba(239,227,207,0.12); }
   .cal-option:hover { background: rgba(255,122,26,0.15); }
   .cal-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+  /* Móvil: encabezado y formulario más compactos para ver todo con poco scroll */
+  @media (max-width: 480px) {
+    .inner { padding: 14px 14px 28px; }
+    .back { margin-bottom: 4px; font-size: 12px; }
+    .header { margin-bottom: 14px; }
+    .pumpkin { font-size: 34px; margin-bottom: 2px; }
+    .kicker { font-size: 11px; letter-spacing: 4px; margin-bottom: 2px; }
+    .title { font-size: 48px; }
+    .info { margin-top: 8px; }
+    .card { padding: 18px 16px; margin-top: 0; }
+    .field { margin-bottom: 14px; }
+    .field > label { margin-bottom: 6px; font-size: 11px; }
+    .field input[type="text"], .field input[type="tel"], .field select { padding: 11px 14px; }
+    .radio-option label { padding: 8px 6px; }
+    .radio-option label .emoji { font-size: 18px; }
+    .divider { margin: 14px 0; }
+    .costume { margin-top: 14px; padding: 9px 12px; font-size: 13px; }
+    .submit-btn { margin-top: 14px; padding: 14px; }
+  }
 </style>
 </head>
 <body>
@@ -173,13 +192,7 @@
       <span class="pumpkin">🎃</span>
       <p class="kicker">Clase especial</p>
       <h1 class="title">Halloween <span>Yoga</span></h1>
-      <p class="subtitle">Edición de temporada</p>
-      <div class="pills">
-        <span class="pill">📅 30 Octubre</span>
-        <span class="pill">📍 Las Tablas</span>
-        <span class="pill">🕯️ 6:30 PM</span>
-        <span class="pill">💶 20 €</span>
-      </div>
+      <p class="info">30 Octubre<span class="sep">·</span>6:30 PM<span class="sep">·</span>Las Tablas<span class="sep">·</span>20 €</p>
     </div>
 
     <div class="card">
@@ -215,15 +228,15 @@
           <div class="radio-group">
             <div class="radio-option">
               <input type="radio" name="hw-nivel" id="hw-n1" value="Básico" />
-              <label for="hw-n1"><span class="emoji">👻</span>Básico</label>
+              <label for="hw-n1"><span class="emoji">🧟</span>Básico</label>
             </div>
             <div class="radio-option">
               <input type="radio" name="hw-nivel" id="hw-n2" value="Normal" />
-              <label for="hw-n2"><span class="emoji">🎃</span>Normal</label>
+              <label for="hw-n2"><span class="emoji">👻</span>Normal</label>
             </div>
             <div class="radio-option">
               <input type="radio" name="hw-nivel" id="hw-n3" value="Pro" />
-              <label for="hw-n3"><span class="emoji">🧙‍♀️</span>Pro</label>
+              <label for="hw-n3"><span class="emoji">🧙</span>Pro</label>
             </div>
           </div>
         </div>
@@ -239,7 +252,7 @@
             </div>
             <div class="radio-option">
               <input type="radio" name="hw-fotos" id="hw-f2" value="No" />
-              <label for="hw-f2"><span class="emoji">🫥</span>Prefiero no</label>
+              <label for="hw-f2"><span class="emoji">🧛</span>Prefiero no</label>
             </div>
           </div>
         </div>

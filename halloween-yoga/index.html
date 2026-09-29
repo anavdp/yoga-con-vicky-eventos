@@ -50,10 +50,9 @@
   .kicker { font-size: 12px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #FF7A1A; margin: 0 0 4px; }
   .title { font-family: 'Bebas Neue', 'Arial Black', sans-serif; font-size: 66px; line-height: 0.88; letter-spacing: 2px; color: #EFE3CF; text-shadow: 0 3px 24px rgba(255,122,26,0.25); }
   .title span { color: #FF7A1A; }
-  .subtitle { font-size: 13px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #FFFFFF; opacity: 0.85; margin-top: 8px; }
 
-  .pills { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-width: 300px; margin: 14px auto 0; }
-  .pill { text-align: center; white-space: nowrap; background: rgba(239,227,207,0.08); border: 1.5px solid rgba(239,227,207,0.35); border-radius: 100px; padding: 5px 14px; font-size: 12px; font-weight: 600; color: #EFE3CF; letter-spacing: 1px; }
+  .info { margin-top: 12px; white-space: nowrap; font-size: clamp(11px, 3.4vw, 13px); font-weight: 600; letter-spacing: 0.5px; color: #EFE3CF; }
+  .info .sep { color: #FF7A1A; margin: 0 6px; }
 
   .card { background: rgba(239,227,207,0.07); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1.5px solid rgba(239,227,207,0.22); border-radius: 24px; padding: 28px 22px; margin-top: 20px; }
 
@@ -173,13 +172,7 @@
       <span class="pumpkin">🎃</span>
       <p class="kicker">Clase especial</p>
       <h1 class="title">Halloween <span>Yoga</span></h1>
-      <p class="subtitle">Edición de temporada</p>
-      <div class="pills">
-        <span class="pill">📅 30 Octubre</span>
-        <span class="pill">📍 Las Tablas</span>
-        <span class="pill">🕯️ 6:30 PM</span>
-        <span class="pill">💶 20 €</span>
-      </div>
+      <p class="info">30 Octubre<span class="sep">·</span>6:30 PM<span class="sep">·</span>Las Tablas<span class="sep">·</span>20 €</p>
     </div>
 
     <div class="card">

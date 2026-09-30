@@ -14,6 +14,8 @@
        descripcion: "…"
      },
      compartir: "🥊 ¡Me apunté al Power Bootcamp! … Apúntate aquí:",
+     pago: { precio: "40 €", bizum: "600 000 000" },  // para el botón de WhatsApp del email de aviso;
+                                                     // sin bizum usa el BIZUM del Apps Script
      hojaUrl: "https://script.google.com/…/exec"  // opcional: solo eventos con Apps Script propio
    };
 
@@ -95,7 +97,15 @@ async function enviarInscripcion() {
 
   // La hoja común necesita saber de qué evento es; los Apps Script propios no
   const url = EVENTO.hojaUrl || REGISTRO_URL;
-  if (!EVENTO.hojaUrl) datos.evento = EVENTO.id;
+  if (!EVENTO.hojaUrl) {
+    datos.evento = EVENTO.id;
+    // Para el email de aviso con el botón de WhatsApp del pago (no se guarda en la hoja)
+    const pago = EVENTO.pago || {};
+    datos.aviso = {
+      nombre: EVENTO.nombre, inicio: EVENTO.calendario.inicio, lugar: EVENTO.calendario.lugar,
+      precio: pago.precio || '', bizum: pago.bizum || ''
+    };
+  }
 
   const btn = $('f-btn');
   const btnText = $('f-btn-text');

@@ -26,7 +26,7 @@
 
 // Apps Script común para todos los eventos (termina en /exec).
 // Se despliega una sola vez desde Google: ver apps-script/registro.gs
-const REGISTRO_URL = "";
+const REGISTRO_URL = "https://script.google.com/macros/s/AKfycbw5_zejzdR-epkBIy3zdJ9s-m2tI5gSghOlPuSXHBLKOMHjocIT_CQOWs_3vgaEG2oVCQ/exec";
 
 const PAISES = [
   ['+34',  '🇪🇸', { min: 9,  max: 9,  pattern: /^[67]/,    hint: '9 dígitos, empieza por 6 o 7' }],

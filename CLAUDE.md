@@ -29,7 +29,7 @@ Registration forms for Vicky De Palma's yoga events (@vicky.depalma), plus an in
 `form.js` POSTs JSON with `mode: 'no-cors'` (opaque response; success is assumed if fetch doesn't throw). Payload: `nombre`, `whatsapp` (`"34 612345678"`), one key per `data-campo`, and `evento` (the `EVENTO.id`) when using the shared script.
 
 - Shared script: URL in `REGISTRO_URL` at the top of `assets/form.js`. `registro.gs` writes each event to a tab named after `evento` (created automatically, new questions become new columns) and keeps a `Contactos` tab with one row per WhatsApp number and the events each person attended.
-- Events with their own older Apps Script set `hojaUrl` in `EVENTO` (Power Bootcamp, Halloween Yoga); `evento` is not sent to those.
+- Events with their own older Apps Script set `hojaUrl` in `EVENTO` (Power Bootcamp); `evento` is not sent to those.
 
 ## Development
 

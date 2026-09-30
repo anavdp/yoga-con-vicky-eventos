@@ -36,12 +36,15 @@
   .events { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
 
   .event {
-    position: relative; overflow: hidden;
+    position: relative; overflow: hidden; display: block; text-decoration: none;
     border-radius: 24px; padding: 22px 20px;
     color: var(--text); background: var(--bg);
     box-shadow: 0 14px 36px rgba(20,40,80,0.30);
     animation: rise .5s ease both;
+    transition: transform .15s, box-shadow .15s;
   }
+  .event:hover, .event:focus-visible { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(20,40,80,0.36), 0 0 0 3px var(--glow); outline: none; }
+  .event:active { transform: translateY(-1px); }
   .event:nth-child(2) { animation-delay: .08s; }
   .event:nth-child(3) { animation-delay: .16s; }
   @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
@@ -60,18 +63,31 @@
   .event-info .item { white-space: nowrap; }
   .event-info .sep { color: var(--accent); margin: 0 6px; }
 
-  .event-btn {
-    position: relative; display: block; width: 100%; text-align: center; text-decoration: none;
-    padding: 14px; border-radius: 16px;
-    font-weight: 800; font-size: 15px; letter-spacing: 1px; text-transform: uppercase;
+  .event-top.con-precio { padding-right: 96px; }
+
+  /* Precio como estampilla */
+  .event-stamp {
+    position: absolute; top: 22px; right: 16px; z-index: 1;
+    transform: rotate(8deg);
+    padding: 5px; border-radius: 14px;
+    border: 2px dashed var(--accent);
+  }
+  .event-stamp span {
+    display: block; min-width: 62px; padding: 8px 10px 6px; border-radius: 10px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 30px; line-height: 1; letter-spacing: 1px; text-align: center;
+    color: var(--btn-hover-text); background: var(--accent);
+    box-shadow: 0 6px 16px var(--glow);
+  }
+
+  .event-bottom { position: relative; display: flex; align-items: center; gap: 12px; margin-top: 16px; }
+  .event-bottom .event-info { margin: 0; flex: 1; }
+  .event-go {
+    flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
+    font-size: 20px; font-weight: 800; line-height: 1;
     color: var(--btn-text); background: var(--btn-bg); border: 2px solid var(--btn-border);
-    transition: transform .15s, box-shadow .15s, background .15s, color .15s;
+    transition: transform .15s, background .15s, color .15s;
   }
-  .event-btn:hover {
-    transform: translateY(-2px);
-    color: var(--btn-hover-text); background: var(--btn-hover-bg);
-    box-shadow: 0 8px 24px var(--glow);
-  }
+  .event:hover .event-go, .event:focus-visible .event-go { transform: translateX(3px); color: var(--btn-hover-text); background: var(--btn-hover-bg); }
 
   /* Past events: compact and muted */
   .past { display: flex; flex-direction: column; gap: 10px; }
@@ -139,7 +155,6 @@ const EVENTOS = [
     hora: "11:00 AM",
     lugar: "El Retiro",
     precio: "40 €",
-    boton: "¡Me apunto! 💜",
     tema: "otono"
   },
   {
@@ -152,7 +167,6 @@ const EVENTOS = [
     hora: "6:30 PM",
     lugar: "Las Tablas",
     precio: "20 €",
-    boton: "¡Me apunto! 🎃",
     tema: "halloween"
   },
   {
@@ -164,7 +178,6 @@ const EVENTOS = [
     fecha: "21 Junio",
     hora: "10:00 AM",
     lugar: "Parque El Retiro",
-    boton: "¡Me apunto! 🌞",
     tema: "verano"
   }
 ];
@@ -201,19 +214,24 @@ if (activos.length === 0) {
   activeEl.innerHTML = `<div class="empty"><strong>Pronto habrá nuevos eventos ✨</strong>Sígueme en Instagram para enterarte.</div>`;
 } else {
   activos.forEach(e => {
-    const card = document.createElement('article');
+    const card = document.createElement('a');
     card.className = 'event';
+    card.href = `./${encodeURIComponent(e.carpeta)}/`;
+    card.setAttribute('aria-label', `Apuntarme a ${e.nombre}`);
     Object.entries(TEMAS[e.tema] || TEMAS.verano).forEach(([k, v]) => card.style.setProperty(k, v));
     card.innerHTML = `
-      <div class="event-top">
+      ${e.precio ? `<div class="event-stamp"><span>${esc(e.precio)}</span></div>` : ''}
+      <div class="event-top${e.precio ? ' con-precio' : ''}">
         <span class="event-emoji">${esc(e.emoji)}</span>
         <div>
           <p class="event-kicker">${esc(e.tipo)}</p>
           <h3 class="event-name">${esc(e.nombre)}</h3>
         </div>
       </div>
-      <p class="event-info">${[e.fecha, e.hora, e.lugar, e.precio].filter(Boolean).map(x => `<span class="item">${esc(x)}</span>`).join('<span class="sep">·</span><wbr>')}</p>
-      <a class="event-btn" href="./${encodeURIComponent(e.carpeta)}/">${esc(e.boton)}</a>`;
+      <div class="event-bottom">
+        <p class="event-info">${[e.fecha, e.hora, e.lugar].filter(Boolean).map(x => `<span class="item">${esc(x)}</span>`).join('<span class="sep">·</span><wbr>')}</p>
+        <span class="event-go" aria-hidden="true">→</span>
+      </div>`;
     activeEl.appendChild(card);
   });
 }

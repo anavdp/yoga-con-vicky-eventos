@@ -8,7 +8,7 @@ Registration forms for Vicky De Palma's yoga events (@vicky.depalma), plus an in
 
 ## Structure
 
-- `index.html` — event list. Events live in the `EVENTOS` array (`carpeta`, `activo`, `emoji`, `tipo`, `nombre`, `fecha`, `hora`, `lugar`, `precio`, `boton`, `tema`); card colors come from the `TEMAS` palettes. `activo: false` moves an event to "Eventos pasados".
+- `index.html` — event list. Events live in the `EVENTOS` array (`carpeta`, `activo`, `emoji`, `tipo`, `nombre`, `fecha`, `hora`, `lugar`, `precio` (shown as a stamp), `tema`); the whole card links to the form. Card colors come from the `TEMAS` palettes. `activo: false` moves an event to "Eventos pasados".
 - `<carpeta>/index.html` — one registration form per event.
 - `assets/forms.css` — shared form styles. Every color is a CSS variable on `:root` (defaults = Power Bootcamp's light palette). An event overrides the variables it needs in its own `<style>` and adds only its own decorations there (floating `.deco` emojis via `--deco-anim`, `.hero-emoji` via `--hero-anim`, special boxes, collaborator logo styles).
 - `assets/form.js` — shared form logic: country code list + phone validation, submit, success screen, calendar picker (Google / Apple .ics / Outlook, rendered into `#cal-wrap`), share button. The header comment lists the required element ids.

@@ -124,17 +124,13 @@ async function enviarInscripcion() {
       mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(datos),
-      keepalive: !EVENTO.hojaUrl
+      keepalive: true
     });
-    if (EVENTO.hojaUrl) {
-      await envio;
-    } else {
-      // El Apps Script común tarda unos segundos en contestar (hoja + email).
-      // Si en 1,5 s no ha fallado (sin conexión falla al momento), damos la
-      // inscripción por enviada; keepalive hace que termine aunque cierren la página.
-      envio.catch(console.error);
-      await Promise.race([envio, new Promise(r => setTimeout(r, 1500))]);
-    }
+    // El Apps Script tarda unos segundos en contestar (hoja + email).
+    // Si en 1,5 s no ha fallado (sin conexión falla al momento), damos la
+    // inscripción por enviada; keepalive hace que termine aunque cierren la página.
+    envio.catch(console.error);
+    await Promise.race([envio, new Promise(r => setTimeout(r, 1500))]);
     $('f-form').style.display = 'none';
     $('f-success').style.display = 'block';
   } catch (err) {

@@ -14,9 +14,6 @@
        descripcion: "…"
      },
      compartir: "🥊 ¡Me apunté al Power Bootcamp! … Apúntate aquí:",
-     whatsappEmail: {                   // opcional: botones de WhatsApp en el email de aviso
-       "✅ Pago recibido": "Hola {nombre}, …"   // {nombre} = nombre de la persona
-     },
      hojaUrl: "https://script.google.com/…/exec"  // opcional: solo eventos con Apps Script propio
    };
 
@@ -99,9 +96,6 @@ async function enviarInscripcion() {
   // La hoja común necesita saber de qué evento es; los Apps Script propios no
   const url = EVENTO.hojaUrl || REGISTRO_URL;
   if (!EVENTO.hojaUrl) datos.evento = EVENTO.id;
-
-  // Textos de los botones de WhatsApp del email; el Apps Script no los guarda en la hoja
-  if (EVENTO.whatsappEmail) datos._whatsapp = EVENTO.whatsappEmail;
 
   const btn = $('f-btn');
   const btnText = $('f-btn-text');

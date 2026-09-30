@@ -14,7 +14,7 @@ Registration forms for Vicky De Palma's yoga events (@vicky.depalma), plus an in
 - `assets/form.js` — shared form logic: country code list + phone validation, submit, success screen, calendar picker (Google / Apple .ics / Outlook, rendered into `#cal-wrap`), share button. The header comment lists the required element ids.
 - `apps-script/registro.gs` — the single Google Apps Script for all events (deployed from Google, not from here).
 - `108-saludos-al-sol/` — past event, still in the old all-in-one-file format. Leave it as is.
-- Logos: `vickydepalma.png`, `vickydepalma-lila.png`, `vickydepalma-crema.png`, `vickydepalma-azul.svg` (index header: vector logo recolored dark blue), `eventieluce.png`.
+- Logos: `vickydepalma.png`, `vickydepalma-lila.png`, `vickydepalma-crema.png` (index header), `eventieluce.png`.
 
 ## Adding an event form
 

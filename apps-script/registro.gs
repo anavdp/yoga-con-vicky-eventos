@@ -25,6 +25,9 @@
      escribe tú las plazas en la columna "Plazas" y verás inscritas y plazas libres.
    - Actualiza la pestaña "Contactos": una fila por número de WhatsApp,
      con los eventos a los que se apuntó cada persona.
+   - Si has puesto AVISO_EMAIL, te manda un email con los datos. Si el evento
+     define whatsappEmail, el email trae un botón por mensaje que abre
+     WhatsApp con esa persona y el texto ya escrito.
    ========================================================= */
 
 const RESUMEN = 'Resumen';
@@ -36,6 +39,8 @@ function doPost(e) {
   const data = JSON.parse(e.postData.contents);
   const evento = String(data.evento || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 60) || 'sin-evento';
   delete data.evento;
+  const botones = data._whatsapp;
+  delete data._whatsapp;
   const ahora = new Date();
 
   const lock = LockService.getScriptLock();
@@ -47,7 +52,7 @@ function doPost(e) {
     lock.releaseLock();
   }
 
-  avisar(evento, data);
+  avisar(evento, data, botones);
   return ContentService.createTextOutput('OK');
 }
 
@@ -115,11 +120,32 @@ function actualizarContacto(evento, data, ahora) {
   ]]);
 }
 
-function avisar(evento, data) {
+function avisar(evento, data, botones) {
   const email = PropertiesService.getScriptProperties().getProperty('AVISO_EMAIL');
   if (!email) return;
   const filas = Object.keys(data).map(k => `<p><b>${k}:</b> ${escapar(data[k])}</p>`).join('');
-  MailApp.sendEmail({ to: email, subject: `Nueva inscripción · ${evento}`, htmlBody: `<h2>¡Nueva inscripción!</h2>${filas}` });
+  MailApp.sendEmail({
+    to: email,
+    subject: `Nueva inscripción · ${evento}`,
+    htmlBody: `<h2>¡Nueva inscripción!</h2>${filas}${botonesWhatsapp(data, botones)}`
+  });
+}
+
+// Un botón por mensaje: abre WhatsApp con esa persona y el texto ya escrito
+function botonesWhatsapp(data, botones) {
+  const numero = String(data.whatsapp || '').replace(/\D/g, '');
+  if (!numero || !botones || typeof botones !== 'object') return '';
+  const nombre = String(data.nombre || '').trim().split(/\s+/)[0];
+  const html = Object.keys(botones).slice(0, 4)
+    .filter(texto => typeof botones[texto] === 'string')
+    .map(texto => {
+      const mensaje = botones[texto].slice(0, 1500).replace(/\{nombre\}/g, nombre);
+      const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
+      return `<a href="${escapar(url)}" style="display:inline-block;margin:0 8px 8px 0;padding:12px 18px;` +
+        `border-radius:100px;background:#25D366;color:#FFFFFF;font-weight:bold;text-decoration:none;">` +
+        `${escapar(texto.slice(0, 60))}</a>`;
+    }).join('');
+  return html ? `<p style="margin-top:24px;">${html}</p>` : '';
 }
 
 // Evita que un texto que empieza por = + - @ se interprete como fórmula

@@ -39,13 +39,23 @@
 
   .s-box.yellow { background: #FDF5D6; border-color: #F3DD86; }
 
-  /* Provisional hasta tener el logo real de Clhoefit */
-  .s-logos .clhoefit {
-    width: 64px; height: 64px; border-radius: 50%; background: #1E9A9C; color: #FFFFFF;
-    border: 3px solid #D5EEEE; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    font-size: 9px; font-weight: 800; letter-spacing: 1px; line-height: 1.1;
+  /* Datos de pago, antes de reservar */
+  .pago { margin-top: 22px; padding: 16px; border-radius: 16px; background: #FDF5D6; border: 1.5px solid #F3DD86; text-align: left; }
+  .pago-titulo { margin: 0 0 4px; font-size: 15px; font-weight: 700; color: #13345A; }
+  .pago-nota { margin: 0 0 12px; font-size: 13px; line-height: 1.45; color: #13345A; opacity: .8; }
+  .pago-dato {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 10px 12px; border-radius: 12px; background: #FFFFFF; color: #13345A;
   }
-  .s-logos .clhoefit b { font-size: 18px; }
+  .pago-dato + .pago-dato { margin-top: 8px; }
+  .pago-dato small { display: block; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #8A68B8; }
+  .pago-dato span { font-size: 15px; font-weight: 600; word-break: break-all; }
+  .pago-dato em { display: block; font-size: 12px; font-style: normal; opacity: .75; }
+  .copiar {
+    flex-shrink: 0; padding: 7px 12px; border: 1.5px solid #D9CCEB; border-radius: 100px; background: #F6F1FB;
+    color: #13345A; font: 600 12px 'Poppins', sans-serif; cursor: pointer;
+  }
+  .copiar:hover { background: #EDE3F7; }
 
   @media (max-width: 480px) {
     .perks { margin-top: 14px; gap: 6px; }
@@ -110,6 +120,19 @@
           <span class="perk">🥑 Brunch en comunidad</span>
         </div>
 
+        <div class="pago">
+          <p class="pago-titulo">💳 Pago: 40 €</p>
+          <p class="pago-nota">Haz el pago ahora para asegurar tu plaza. Pon tu nombre en el concepto.</p>
+          <div class="pago-dato">
+            <div><small>Transferencia</small><span>BE31 9056 7777 2955</span><em>Clhoe Gómez Ruiz</em></div>
+            <button type="button" class="copiar" data-copiar="BE31905677772955">Copiar</button>
+          </div>
+          <div class="pago-dato">
+            <div><small>Bizum</small><span>687 613 521</span></div>
+            <button type="button" class="copiar" data-copiar="687613521">Copiar</button>
+          </div>
+        </div>
+
         <div class="error-msg" id="f-error">😅 Algo salió mal, por favor inténtalo de nuevo.</div>
 
         <button class="submit-btn" id="f-btn">
@@ -121,7 +144,7 @@
       <div class="success" id="f-success">
         <span class="icon">💪</span>
         <p class="s-title">¡Ya casi!</p>
-        <p class="s-msg">Tu plaza queda <strong>reservada</strong>. Te escribiremos por WhatsApp para el pago (<strong>40 €</strong>, Bizum o efectivo) y así confirmar tu lugar.</p>
+        <p class="s-msg">Tu plaza queda <strong>reservada</strong>. Te escribiremos para confirmar el pago.</p>
 
         <div class="s-box">
           📅 <strong>Domingo 18 de octubre · 11:00 AM</strong><br>
@@ -137,7 +160,7 @@
 
         <div class="s-logos">
           <img src="../vickydepalma-lila.png" alt="Vicky De Palma" />
-          <span class="clhoefit" title="Clhoefit"><b>⚡</b>CLHOEFIT</span>
+          <img src="../clhoefit.png" alt="Power Tribe Community by Clhoefit" />
         </div>
       </div>
     </div>
@@ -164,10 +187,20 @@ const EVENTO = {
     descripcion: "Clase especial al aire libre: entrenamiento fullbody, yoga y brunch en comunidad. Trae tu esterilla y agua 💜"
   },
   compartir: "🥊 ¡Me apunté al Power Bootcamp edición otoño! Domingo 18 de octubre, 11:00 AM en El Retiro: fullbody, yoga y brunch en comunidad 💜 Apúntate aquí:",
-  // Este evento sigue con su propio Apps Script (ya tiene inscripciones)
-  hojaUrl: "https://script.google.com/macros/s/AKfycbwuebL1IY_HSqZhwuzTEN7mQC2dmtFnq2qzRc5PT33bkHWFUGGLLHoiRkPovN3tnvYw/exec"
+  // Botones de WhatsApp en el email de cada inscripción ({nombre} se cambia por el nombre de la persona)
+  whatsappEmail: {
+    "✅ Pago recibido": "Hola {nombre}, gracias por inscribirte al Power Bootcamp 💜 ¡Nos vemos!\n\n📅 Domingo 18 de octubre · 11:00 AM\n📍 El Retiro, frente a la Casita del Pescador: https://www.google.com/maps/search/?api=1&query=Casita+del+Pescador+Parque+del+Retiro+Madrid\n🧘 Trae tu esterilla, agua y ganas. Después, ¡brunch juntas! 🥑",
+    "⏳ Pago no recibido": "Hola {nombre}, no hemos recibido tu pago del Power Bootcamp (40 €). Por favor recuerda realizarlo para confirmar tu plaza 💜\n\n💳 Transferencia: BE31905677772955 (Clhoe Gómez Ruiz)\n📲 Bizum: 687613521\n\nPon tu nombre en el concepto."
+  }
 };
 </script>
 <script src="../assets/form.js"></script>
+<script>
+document.querySelectorAll('.copiar').forEach(btn => btn.addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText(btn.dataset.copiar); } catch (err) { return; }
+  btn.textContent = '¡Copiado!';
+  setTimeout(() => { btn.textContent = 'Copiar'; }, 1800);
+}));
+</script>
 </body>
 </html>

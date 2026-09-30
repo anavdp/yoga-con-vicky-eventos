@@ -5,238 +5,150 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Halloween Yoga · Inscripción</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/forms.css">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #0e0c0a; }
-
-  .hw-wrap {
-    font-family: 'Poppins', sans-serif;
-    min-height: 100vh;
-    background:
+  /* Paleta de Halloween: negro cálido, crema y naranja calabaza */
+  :root {
+    --page-bg: #0e0c0a;
+    --wrap-bg:
       radial-gradient(ellipse at 50% -10%, rgba(255,122,26,0.35) 0%, transparent 55%),
       radial-gradient(ellipse at 100% 100%, rgba(239,227,207,0.12) 0%, transparent 50%),
       linear-gradient(170deg, #1d1915 0%, #141210 60%, #0e0c0a 100%);
-    position: relative;
-    overflow: hidden;
+    --ink: #EFE3CF;
+    --accent: #FF7A1A;
+    --accent-strong: #FF7A1A;
+    --on-accent: #141210;
+
+    --blob1: #FF7A1A; --blob1-opacity: 0.22;
+    --blob2: #EFE3CF; --blob2-opacity: 0.10;
+
+    --card-bg: rgba(239,227,207,0.07);
+    --card-border: rgba(239,227,207,0.22);
+    --card-shadow: none;
+    --input-bg: #FBF6EE;
+    --input-border: #EFE3CF;
+    --input-text: #141210;
+    --placeholder: #E8650E;
+    --focus-ring: rgba(255,122,26,0.3);
+    --option-bg: rgba(239,227,207,0.06);
+    --option-border: rgba(239,227,207,0.3);
+    --option-hover: rgba(239,227,207,0.14);
+    --option-shadow: 0 0 20px rgba(255,122,26,0.4);
+    --divider: rgba(239,227,207,0.18);
+
+    --error: #ff4d2e;
+    --error-ring: rgba(255,77,46,0.35);
+    --error-text: #FFB08A;
+    --error-box-text: #EFE3CF;
+    --error-box-bg: rgba(255,80,40,0.2);
+    --error-box-border: rgba(255,122,26,0.5);
+
+    --btn-bg: #141210;
+    --btn-text: #FF7A1A;
+    --btn-border: #FF7A1A;
+    --btn-shadow: 0 0 18px rgba(255,122,26,0.25);
+    --btn-hover-bg: #FF7A1A;
+    --btn-hover-text: #141210;
+    --btn-hover-shadow: 0 8px 28px rgba(255,122,26,0.45);
+    --spinner: #FF7A1A;
+    --spinner-track: rgba(255,122,26,0.3);
+
+    --footer-text: rgba(239,227,207,0.65);
+    --footer-underline: rgba(255,122,26,0.6);
+    --footer-hover: #FFFFFF;
+    --success-title: #FF7A1A;
+    --link-underline: rgba(255,122,26,0.6);
+    --box-bg: rgba(239,227,207,0.08);
+    --box-border: rgba(239,227,207,0.25);
+    --box-strong: #FF7A1A;
+
+    --picker-bg: #1d1915;
+    --picker-border: rgba(255,122,26,0.6);
+    --picker-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 18px rgba(255,122,26,0.2);
+    --picker-divider: rgba(239,227,207,0.12);
+    --picker-hover: rgba(255,122,26,0.15);
+
+    --deco-opacity: 0.55;
+    --deco-anim: flutter 6s ease-in-out infinite;
+    --hero-anim: glow 3s ease-in-out infinite;
   }
 
-  .blob { position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none; }
-  .blob1 { width: 300px; height: 300px; background: #FF7A1A; opacity: 0.22; top: -90px; right: -90px; animation: breathe 7s ease-in-out infinite; }
-  .blob2 { width: 240px; height: 240px; background: #EFE3CF; opacity: 0.10; bottom: 40px; left: -80px; animation: breathe 9s ease-in-out infinite reverse; }
-  @keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
-
-  .bat { position: absolute; font-size: 22px; pointer-events: none; opacity: 0.55; z-index: 1; animation: flutter 6s ease-in-out infinite; }
-  .bat1 { top: 60px; left: 8%; }
-  .bat2 { top: 130px; right: 10%; font-size: 16px; animation-delay: -2s; }
-  .bat3 { top: 38%; left: 4%; font-size: 14px; animation-delay: -4s; }
   @keyframes flutter {
     0%,100% { transform: translate(0,0) rotate(-6deg); }
     25% { transform: translate(8px,-10px) rotate(4deg); }
     50% { transform: translate(-4px,-16px) rotate(-3deg); }
     75% { transform: translate(-8px,-6px) rotate(6deg); }
   }
-
-  .inner { position: relative; z-index: 2; max-width: 500px; margin: 0 auto; padding: 32px 16px 44px; }
-  .back { display: inline-block; margin-bottom: 16px; color: #EFE3CF; opacity: .75; font-size: 13px; font-weight: 600; text-decoration: none; }
-  .back:hover { opacity: 1; color: #FF7A1A; }
-  .header { text-align: center; margin-bottom: 24px; }
-
-  .pumpkin { font-size: 54px; line-height: 1; display: block; margin-bottom: 6px; animation: glow 3s ease-in-out infinite; }
   @keyframes glow {
     0%,100% { filter: drop-shadow(0 0 14px rgba(255,122,26,0.6)); }
     50% { filter: drop-shadow(0 0 26px rgba(255,122,26,0.95)); }
   }
 
-  .kicker { font-size: 12px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #FF7A1A; margin: 0 0 4px; }
-  .title { font-family: 'Bebas Neue', 'Arial Black', sans-serif; font-size: 66px; line-height: 0.88; letter-spacing: 2px; color: #EFE3CF; text-shadow: 0 3px 24px rgba(255,122,26,0.25); }
-  .title span { color: #FF7A1A; }
-
-  .info { margin-top: 12px; white-space: nowrap; font-size: clamp(11px, 3.4vw, 13px); font-weight: 600; letter-spacing: 0.5px; color: #EFE3CF; }
-  .info .sep { color: #FF7A1A; margin: 0 6px; }
-
-  .card { background: rgba(239,227,207,0.07); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1.5px solid rgba(239,227,207,0.22); border-radius: 24px; padding: 28px 22px; margin-top: 20px; }
-
-  .field { margin-bottom: 20px; }
-  .field > label { display: block; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #EFE3CF; margin-bottom: 8px; }
-
-  .field input[type="text"], .field input[type="tel"], .field select {
-    width: 100%; padding: 13px 16px; border-radius: 14px;
-    border: 1.5px solid #EFE3CF; background: #FBF6EE; color: #141210;
-    font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 600;
-    outline: none; transition: border-color .2s, box-shadow .2s;
-  }
-  .field input::placeholder { color: #E8650E; opacity: 0.85; font-weight: 500; }
-  .field input:focus, .field select:focus { border-color: #FF7A1A; box-shadow: 0 0 0 3px rgba(255,122,26,0.3); }
-
-  .phone-row { display: flex; gap: 8px; }
-  .phone-row select { flex: 0 0 112px; appearance: none; -webkit-appearance: none; cursor: pointer; }
-  .phone-row input { flex: 1; min-width: 0; }
-  .field input.invalid { border-color: #ff4d2e; box-shadow: 0 0 0 3px rgba(255,77,46,0.35); }
-  .field-error { display: none; color: #FFB08A; font-size: 13px; font-weight: 600; margin-top: 6px; }
-
-  .radio-group { display: flex; gap: 10px; }
-  .radio-option { flex: 1; }
-  .radio-option input { display: none; }
-  .radio-option label {
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-    padding: 11px 8px; border-radius: 14px;
-    border: 1.5px solid rgba(239,227,207,0.3); background: rgba(239,227,207,0.06);
-    color: #EFE3CF; font-size: 13px; font-weight: 600; cursor: pointer;
-    transition: all .18s; text-align: center; white-space: nowrap;
-  }
-  .radio-option label .emoji { font-size: 22px; line-height: 1; }
-  .radio-option label:hover { background: rgba(239,227,207,0.14); }
-  .radio-option input:checked + label { background: #FF7A1A; border-color: #FF7A1A; color: #141210; box-shadow: 0 0 20px rgba(255,122,26,0.4); }
-
-  .divider { height: 1px; background: rgba(239,227,207,0.18); margin: 22px 0; }
-
-  .submit-btn {
-    width: 100%; padding: 16px; border-radius: 16px;
-    border: 2px solid #FF7A1A; background: #141210; color: #FF7A1A;
-    font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 800; letter-spacing: 1px;
-    text-transform: uppercase; cursor: pointer; margin-top: 22px;
-    box-shadow: 0 0 18px rgba(255,122,26,0.25);
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    transition: transform .15s, box-shadow .15s, background .15s, color .15s;
-  }
-  .submit-btn:hover { transform: translateY(-2px); background: #FF7A1A; color: #141210; box-shadow: 0 8px 28px rgba(255,122,26,0.45); }
-  .submit-btn:disabled { opacity: .7; cursor: not-allowed; transform: none; }
-
-  .spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,122,26,0.3); border-top-color: #FF7A1A; border-radius: 50%; animation: spin .7s linear infinite; display: none; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .error-msg { display: none; margin-top: 14px; padding: 10px 14px; border-radius: 12px; text-align: center; font-size: 13px; font-weight: 600; color: #EFE3CF; background: rgba(255,80,40,0.2); border: 1.5px solid rgba(255,122,26,0.5); }
-
-  .footer { text-align: center; margin-top: 18px; font-size: 12px; color: rgba(239,227,207,0.65); font-weight: 500; }
-  .footer a { color: #EFE3CF; font-weight: 700; text-decoration: none; border-bottom: 1.5px solid rgba(255,122,26,0.6); padding-bottom: 1px; }
-  .footer a:hover { border-color: #FF7A1A; color: #FFFFFF; }
-
-  .success { display: none; text-align: center; padding: 36px 8px; }
-  .success .icon { font-size: 56px; display: block; margin-bottom: 10px; }
-  .success .s-title { font-family: 'Bebas Neue', sans-serif; font-size: 44px; color: #FF7A1A; margin-bottom: 8px; letter-spacing: 1px; }
-  .success .s-msg { color: #EFE3CF; font-size: 15px; line-height: 1.55; }
-  .success a { color: #FF7A1A; font-weight: 700; text-decoration: none; border-bottom: 1.5px solid rgba(255,122,26,0.6); }
+  .back { opacity: .75; }
+  .title { text-shadow: 0 3px 24px rgba(255,122,26,0.25); }
+  .field input::placeholder { opacity: 0.85; }
+  .footer a:hover { border-color: #FF7A1A; }
 
   .costume { text-align: center; margin-top: 22px; padding: 12px 16px; border-radius: 16px; border: 1.5px dashed #FF7A1A; background: rgba(255,122,26,0.12); color: #EFE3CF; font-size: 14px; font-weight: 600; line-height: 1.45; }
   .costume strong { color: #FF7A1A; }
 
-  .s-box { margin-top: 18px; padding: 14px 16px; border-radius: 16px; background: rgba(239,227,207,0.08); border: 1.5px solid rgba(239,227,207,0.25); color: #EFE3CF; font-size: 14px; line-height: 1.5; text-align: left; }
-  .s-box + .s-box { margin-top: 10px; }
-  .s-box strong { color: #FF7A1A; }
-
-  .share-btn { margin-top: 12px; }
-
-  .s-logos { display: flex; align-items: center; justify-content: center; gap: 22px; margin-top: 28px; }
-  .s-logos img { width: 64px; height: 64px; object-fit: contain; }
   /* El logo de Eventi e Luce es gris sobre transparente: va en un círculo crema como el de Vicky */
   .s-logos .eventi { width: 64px; height: 64px; border-radius: 50%; background: #F7F3EE; display: flex; align-items: center; justify-content: center; overflow: hidden; }
   .s-logos .eventi img { width: 84px; height: 84px; max-width: none; }
 
-  .cal-wrap { position: relative; margin-top: 22px; }
-  .cal-picker {
-    position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; z-index: 5;
-    background: #1d1915; border: 1.5px solid rgba(255,122,26,0.6); border-radius: 18px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 18px rgba(255,122,26,0.2);
-    overflow: hidden; transform-origin: bottom center;
-    animation: pickerIn 0.16s cubic-bezier(0.34,1.56,0.64,1);
-  }
-  @keyframes pickerIn {
-    from { opacity: 0; transform: scale(0.93) translateY(8px); }
-    to   { opacity: 1; transform: scale(1) translateY(0); }
-  }
-  .cal-option {
-    display: flex; align-items: center; gap: 14px;
-    padding: 13px 18px; width: 100%; border: none;
-    background: transparent; cursor: pointer;
-    font-family: 'Poppins', sans-serif; font-size: 14px;
-    font-weight: 600; color: #EFE3CF; text-align: left;
-    transition: background 0.12s;
-  }
-  .cal-option:not(:last-child) { border-bottom: 1px solid rgba(239,227,207,0.12); }
-  .cal-option:hover { background: rgba(255,122,26,0.15); }
-  .cal-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-
-  /* Móvil: encabezado y formulario más compactos para ver todo con poco scroll */
   @media (max-width: 480px) {
-    .inner { padding: 14px 14px 28px; }
-    .back { margin-bottom: 4px; font-size: 12px; }
-    .header { margin-bottom: 14px; }
-    .pumpkin { font-size: 34px; margin-bottom: 2px; }
-    .kicker { font-size: 11px; letter-spacing: 4px; margin-bottom: 2px; }
-    .title { font-size: 48px; }
-    .info { margin-top: 8px; }
-    .card { padding: 18px 16px; margin-top: 0; }
-    .field { margin-bottom: 14px; }
-    .field > label { margin-bottom: 6px; font-size: 11px; }
-    .field input[type="text"], .field input[type="tel"], .field select { padding: 11px 14px; }
-    .radio-option label { padding: 8px 6px; }
-    .radio-option label .emoji { font-size: 18px; }
-    .divider { margin: 14px 0; }
     .costume { margin-top: 14px; padding: 9px 12px; font-size: 13px; }
-    .submit-btn { margin-top: 14px; padding: 14px; }
   }
 </style>
 </head>
 <body>
-<div class="hw-wrap">
+<div class="page">
   <div class="blob blob1"></div>
   <div class="blob blob2"></div>
-  <span class="bat bat1">🦇</span>
-  <span class="bat bat2">🦇</span>
-  <span class="bat bat3">🦇</span>
+  <span class="deco deco1">🦇</span>
+  <span class="deco deco2">🦇</span>
+  <span class="deco deco3">🦇</span>
 
   <div class="inner">
     <a class="back" href="../">← Todos los eventos</a>
 
     <div class="header">
-      <span class="pumpkin">🎃</span>
+      <span class="hero-emoji">🎃</span>
       <p class="kicker">Clase especial</p>
       <h1 class="title">Halloween <span>Yoga</span></h1>
       <p class="info">30 Octubre<span class="sep">·</span>6:30 PM<span class="sep">·</span>Las Tablas<span class="sep">·</span>20 €</p>
     </div>
 
     <div class="card">
-      <div id="hw-form">
+      <div id="f-form">
         <div class="field">
-          <label for="hw-nombre">Nombre completo</label>
-          <input type="text" id="hw-nombre" placeholder="¿Cómo te llamas?" autocomplete="name" />
+          <label for="f-nombre">Nombre completo</label>
+          <input type="text" id="f-nombre" placeholder="¿Cómo te llamas?" autocomplete="name" />
         </div>
 
         <div class="field">
-          <label for="hw-whatsapp">Número de WhatsApp</label>
+          <label for="f-whatsapp">Número de WhatsApp</label>
           <div class="phone-row">
-            <select id="hw-country" aria-label="Código de país">
-              <option value="+34" selected>🇪🇸 +34</option>
-              <option value="+54">🇦🇷 +54</option>
-              <option value="+39">🇮🇹 +39</option>
-              <option value="+33">🇫🇷 +33</option>
-              <option value="+44">🇬🇧 +44</option>
-              <option value="+49">🇩🇪 +49</option>
-              <option value="+351">🇵🇹 +351</option>
-              <option value="+52">🇲🇽 +52</option>
-              <option value="+57">🇨🇴 +57</option>
-              <option value="+58">🇻🇪 +58</option>
-              <option value="+1">🇺🇸 +1</option>
-            </select>
-            <input type="tel" id="hw-whatsapp" inputmode="numeric" placeholder="612 345 678" autocomplete="tel-national" maxlength="15" />
+            <select id="f-country" aria-label="Código de país"></select>
+            <input type="tel" id="f-whatsapp" inputmode="numeric" placeholder="612 345 678" autocomplete="tel-national" maxlength="15" />
           </div>
-          <p class="field-error" id="hw-whatsapp-error"></p>
+          <p class="field-error" id="f-whatsapp-error"></p>
         </div>
 
         <div class="field">
           <label>Nivel de yoga</label>
-          <div class="radio-group">
+          <div class="radio-group" data-campo="nivel" data-falta="¿Cuál es tu nivel de yoga? 🧘">
             <div class="radio-option">
-              <input type="radio" name="hw-nivel" id="hw-n1" value="Básico" />
-              <label for="hw-n1"><span class="emoji">🧟</span>Básico</label>
+              <input type="radio" name="nivel" id="nivel-1" value="Básico" />
+              <label for="nivel-1"><span class="emoji">🧟</span>Básico</label>
             </div>
             <div class="radio-option">
-              <input type="radio" name="hw-nivel" id="hw-n2" value="Normal" />
-              <label for="hw-n2"><span class="emoji">👻</span>Normal</label>
+              <input type="radio" name="nivel" id="nivel-2" value="Normal" />
+              <label for="nivel-2"><span class="emoji">👻</span>Normal</label>
             </div>
             <div class="radio-option">
-              <input type="radio" name="hw-nivel" id="hw-n3" value="Pro" />
-              <label for="hw-n3"><span class="emoji">🧙</span>Pro</label>
+              <input type="radio" name="nivel" id="nivel-3" value="Pro" />
+              <label for="nivel-3"><span class="emoji">🧙</span>Pro</label>
             </div>
           </div>
         </div>
@@ -245,14 +157,14 @@
 
         <div class="field">
           <label>¿Puedo publicar fotos del evento en donde aparezcas?</label>
-          <div class="radio-group">
+          <div class="radio-group" data-campo="fotos" data-falta="Falta responder la pregunta sobre fotos 📸">
             <div class="radio-option">
-              <input type="radio" name="hw-fotos" id="hw-f1" value="Sí" />
-              <label for="hw-f1"><span class="emoji">📸</span>Sí, claro</label>
+              <input type="radio" name="fotos" id="fotos-1" value="Sí" />
+              <label for="fotos-1"><span class="emoji">📸</span>Sí, claro</label>
             </div>
             <div class="radio-option">
-              <input type="radio" name="hw-fotos" id="hw-f2" value="No" />
-              <label for="hw-f2"><span class="emoji">🧛</span>Prefiero no</label>
+              <input type="radio" name="fotos" id="fotos-2" value="No" />
+              <label for="fotos-2"><span class="emoji">🧛</span>Prefiero no</label>
             </div>
           </div>
         </div>
@@ -262,15 +174,15 @@
           🏆 Habrá premio al mejor disfraz
         </div>
 
-        <div class="error-msg" id="hw-error">😅 Algo salió mal, por favor inténtalo de nuevo.</div>
+        <div class="error-msg" id="f-error">😅 Algo salió mal, por favor inténtalo de nuevo.</div>
 
-        <button class="submit-btn" id="hw-btn" onclick="hwSubmit()">
-          <span id="hw-btn-text">¡Me apunto! 🎃</span>
-          <span class="spinner" id="hw-spinner"></span>
+        <button class="submit-btn" id="f-btn">
+          <span id="f-btn-text">¡Me apunto! 🎃</span>
+          <span class="spinner" id="f-spinner"></span>
         </button>
       </div>
 
-      <div class="success" id="hw-success">
+      <div class="success" id="f-success">
         <span class="icon">🕸️</span>
         <p class="s-title">¡Ya casi!</p>
         <p class="s-msg">Tu plaza queda <strong>reservada</strong>. Te escribiremos por WhatsApp para el pago (<strong>20 €</strong>, Bizum o efectivo) y así confirmar tu lugar.</p>
@@ -283,48 +195,9 @@
           🎭 <strong>¡Recuerda venir con tu disfraz!</strong>
         </div>
 
-        <div class="cal-wrap" id="cal-wrap">
-            <div class="cal-picker" id="cal-picker" style="display:none;">
-              <button class="cal-option" onclick="calSelect('google')">
-                <span class="cal-icon" style="background:#fff; border:1.5px solid #e8e8e8;">
-                  <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                    <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.717v2.258h2.908C16.657 14.253 17.64 11.945 17.64 9.2z"/>
-                    <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258a5.37 5.37 0 0 1-8.009-2.452H.957v2.332A9 9 0 0 0 9 18z"/>
-                    <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.961H.957A9 9 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.329z"/>
-                    <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A9 9 0 0 0 .957 4.96l3.007 2.332C4.672 5.163 6.656 3.58 9 3.58z"/>
-                  </svg>
-                </span>
-                Google Calendar
-              </button>
-              <button class="cal-option" onclick="calSelect('apple')">
-                <span class="cal-icon" style="background:#FF3B30;">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="3" y="5" width="18" height="16" rx="3" stroke="white" stroke-width="1.6" fill="rgba(255,255,255,0.15)"/>
-                    <path d="M3 10h18" stroke="white" stroke-width="1.6"/>
-                    <path d="M8 3v4M16 3v4" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
-                    <text x="12" y="20" text-anchor="middle" font-size="7.5" font-weight="700" fill="white" font-family="sans-serif">30</text>
-                  </svg>
-                </span>
-                Apple Calendar
-              </button>
-              <button class="cal-option" onclick="calSelect('outlook')">
-                <span class="cal-icon" style="background:#0078D4;">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="3" y="5" width="18" height="16" rx="3" stroke="white" stroke-width="1.6" fill="rgba(255,255,255,0.15)"/>
-                    <path d="M3 10h18" stroke="white" stroke-width="1.6"/>
-                    <path d="M8 3v4M16 3v4" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
-                    <circle cx="8.5" cy="15.5" r="1.2" fill="white"/>
-                    <circle cx="12" cy="15.5" r="1.2" fill="white"/>
-                    <circle cx="15.5" cy="15.5" r="1.2" fill="white"/>
-                  </svg>
-                </span>
-                Outlook
-              </button>
-            </div>
-          <button class="submit-btn" onclick="toggleCalPicker(event)">📅 Añadir al calendario</button>
-        </div>
+        <div class="cal-wrap" id="cal-wrap"></div>
 
-        <button class="submit-btn share-btn" onclick="hwShare()">Compártelo con tus amig@s 👻</button>
+        <button class="submit-btn share-btn" id="f-share">Compártelo con tus amig@s 👻</button>
 
         <div class="s-logos">
           <img src="../vickydepalma.png" alt="Vicky De Palma" />
@@ -343,164 +216,22 @@
 </div>
 
 <script>
-// ⬇️ Pega aquí la URL de tu Apps Script de Halloween (termina en /exec)
-const SHEETS_URL = "https://script.google.com/macros/s/AKfycbzIJdYFOxs9VS8quhzMvx_SfGwv_kTEAPhXS9lA20keKvi8ljYOLCvX-EqXvf8gNawp_g/exec";
-
-const phoneRules = {
-  '+34':  { min: 9, max: 9,   pattern: /^[67]/,    hint: '9 dígitos, empieza por 6 o 7' },
-  '+54':  { min: 10, max: 10,                       hint: '10 dígitos' },
-  '+39':  { min: 9,  max: 10, pattern: /^3/,        hint: '9-10 dígitos, empieza por 3' },
-  '+33':  { min: 9,  max: 9,  pattern: /^[67]/,     hint: '9 dígitos, empieza por 6 o 7' },
-  '+44':  { min: 10, max: 10, pattern: /^7/,        hint: '10 dígitos, empieza por 7' },
-  '+49':  { min: 10, max: 11, pattern: /^1[5679]/, hint: '10-11 dígitos, empieza por 15, 16, 17 o 19' },
-  '+351': { min: 9,  max: 9,  pattern: /^9/,        hint: '9 dígitos, empieza por 9' },
-  '+52':  { min: 10, max: 10,                       hint: '10 dígitos' },
-  '+57':  { min: 10, max: 10, pattern: /^3/,        hint: '10 dígitos, empieza por 3' },
-  '+58':  { min: 10, max: 11,                       hint: '10-11 dígitos' },
-  '+1':   { min: 10, max: 10,                       hint: '10 dígitos' },
+const EVENTO = {
+  id: "halloween-yoga-2026",
+  nombre: "Halloween Yoga",
+  archivo: "halloween-yoga",
+  calendario: {
+    titulo: "Halloween Yoga 🎃",
+    inicio: "2026-10-30 18:30",
+    fin: "2026-10-30 19:30",
+    lugar: "Calle de Puente la Reina, 27, Madrid",
+    descripcion: "Clase especial de Halloween Yoga. ¡Ven con tu disfraz, hay premio al mejor! 🏆"
+  },
+  compartir: "🎃 ¡Me apunté a Halloween Yoga! 30 de octubre, 6:30 PM en Las Tablas. Ven con tu disfraz, ¡hay premio al mejor! 🏆 Apúntate aquí:",
+  // Este evento sigue con su propio Apps Script (ya tiene inscripciones)
+  hojaUrl: "https://script.google.com/macros/s/AKfycbzIJdYFOxs9VS8quhzMvx_SfGwv_kTEAPhXS9lA20keKvi8ljYOLCvX-EqXvf8gNawp_g/exec"
 };
-
-const hwWhatsapp = document.getElementById('hw-whatsapp');
-
-hwWhatsapp.addEventListener('input', () => {
-  hwWhatsapp.value = hwWhatsapp.value.replace(/[^\d\s]/g, '');
-  hwWhatsapp.classList.remove('invalid');
-  document.getElementById('hw-whatsapp-error').style.display = 'none';
-});
-
-function validatePhone() {
-  const digits = hwWhatsapp.value.replace(/\D/g, '');
-  const code = document.getElementById('hw-country').value;
-  const rule = phoneRules[code] || { min: 6, max: 15 };
-  if (digits.length < rule.min || digits.length > rule.max) return { digits: null, hint: rule.hint };
-  if (rule.pattern && !rule.pattern.test(digits)) return { digits: null, hint: rule.hint };
-  return { digits, hint: null };
-}
-
-async function hwSubmit() {
-  const nombre = document.getElementById('hw-nombre').value.trim();
-  const countryCode = document.getElementById('hw-country').value;
-  const { digits: phoneDigits, hint: phoneHint } = validatePhone();
-  const nivel = document.querySelector('input[name="hw-nivel"]:checked');
-  const fotos = document.querySelector('input[name="hw-fotos"]:checked');
-
-  if (!nombre) { alert('Por favor escribe tu nombre 🙂'); return; }
-  if (!phoneDigits) {
-    hwWhatsapp.classList.add('invalid');
-    const errEl = document.getElementById('hw-whatsapp-error');
-    errEl.textContent = phoneHint ? `Número no válido · ${phoneHint} 📱` : 'Revisa el número 📱';
-    errEl.style.display = 'block';
-    hwWhatsapp.focus();
-    return;
-  }
-  if (!nivel) { alert('¿Cuál es tu nivel de yoga? 🧘'); return; }
-  if (!fotos) { alert('Falta responder la pregunta sobre fotos 📸'); return; }
-
-  const btn = document.getElementById('hw-btn');
-  const btnText = document.getElementById('hw-btn-text');
-  const spinner = document.getElementById('hw-spinner');
-  const errorMsg = document.getElementById('hw-error');
-
-  btn.disabled = true;
-  btnText.textContent = 'Enviando...';
-  spinner.style.display = 'block';
-  errorMsg.style.display = 'none';
-
-  try {
-    await fetch(SHEETS_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ nombre, whatsapp: countryCode.slice(1) + ' ' + phoneDigits, nivel: nivel.value, fotos: fotos.value })
-    });
-    document.getElementById('hw-form').style.display = 'none';
-    document.getElementById('hw-success').style.display = 'block';
-  } catch (err) {
-    errorMsg.style.display = 'block';
-    btn.disabled = false;
-    btnText.textContent = '¡Me apunto! 🎃';
-    spinner.style.display = 'none';
-  }
-}
-
-// 30 oct 2026, 18:30–19:30 hora de Madrid (ya en horario de invierno, UTC+1)
-const EV_START = '20261030T173000Z';
-const EV_END = '20261030T183000Z';
-const EV_TITLE = 'Halloween Yoga 🎃';
-const EV_PLACE = 'Calle de Puente la Reina, 27, Madrid';
-const EV_DESC = 'Clase especial de Halloween Yoga. ¡Ven con tu disfraz, hay premio al mejor! 🏆';
-
-function toggleCalPicker(e) {
-  e.stopPropagation();
-  const picker = document.getElementById('cal-picker');
-  if (picker.style.display !== 'none') {
-    picker.style.display = 'none';
-  } else {
-    picker.style.display = 'block';
-    picker.style.animation = 'none';
-    picker.offsetHeight;
-    picker.style.animation = '';
-  }
-}
-
-document.addEventListener('click', function(e) {
-  const wrap = document.getElementById('cal-wrap');
-  if (wrap && !wrap.contains(e.target)) {
-    document.getElementById('cal-picker').style.display = 'none';
-  }
-});
-
-function calSelect(type) {
-  document.getElementById('cal-picker').style.display = 'none';
-  const enc = encodeURIComponent;
-  if (type === 'google') {
-    window.open(
-      'https://calendar.google.com/calendar/render?action=TEMPLATE' +
-      '&text=' + enc(EV_TITLE) +
-      '&dates=' + EV_START + '%2F' + EV_END +
-      '&details=' + enc(EV_DESC) +
-      '&location=' + enc(EV_PLACE),
-      '_blank', 'noopener'
-    );
-  } else if (type === 'outlook') {
-    window.open(
-      'https://outlook.live.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose&rru=addevent' +
-      '&subject=' + enc(EV_TITLE) +
-      '&startdt=2026-10-30T17%3A30%3A00Z&enddt=2026-10-30T18%3A30%3A00Z' +
-      '&location=' + enc(EV_PLACE) +
-      '&body=' + enc(EV_DESC),
-      '_blank', 'noopener'
-    );
-  } else {
-    const ics = [
-      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Halloween Yoga//ES',
-      'BEGIN:VEVENT',
-      'UID:halloween-yoga-2026@yogaconvicky',
-      'DTSTAMP:' + EV_START,
-      'DTSTART:' + EV_START, 'DTEND:' + EV_END,
-      'SUMMARY:' + EV_TITLE,
-      'LOCATION:' + EV_PLACE.replace(/,/g, '\\,'),
-      'DESCRIPTION:' + EV_DESC.replace(/,/g, '\\,'),
-      'END:VEVENT', 'END:VCALENDAR'
-    ].join('\r\n');
-    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = 'halloween-yoga.ics';
-    document.body.appendChild(a); a.click();
-    document.body.removeChild(a); URL.revokeObjectURL(url);
-  }
-}
-
-async function hwShare() {
-  const url = location.origin + location.pathname;
-  const text = '🎃 ¡Me apunté a Halloween Yoga! 30 de octubre, 6:30 PM en Las Tablas. Ven con tu disfraz, ¡hay premio al mejor! 🏆 Apúntate aquí:';
-  if (navigator.share) {
-    try { await navigator.share({ title: 'Halloween Yoga', text, url }); } catch (err) {}
-    return;
-  }
-  window.open('https://wa.me/?text=' + encodeURIComponent(text + ' ' + url), '_blank', 'noopener');
-}
 </script>
+<script src="../assets/form.js"></script>
 </body>
 </html>

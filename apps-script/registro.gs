@@ -80,8 +80,7 @@ function guardarInscripcion(evento, data, ahora) {
 }
 
 // Una fila por evento; las plazas las escribes tú, el resto se calcula solo.
-// Las fórmulas se vuelven a escribir con cada inscripción, así se arreglan solas.
-// setFormulas usa siempre la sintaxis en inglés (con comas), sea cual sea el idioma de la hoja.
+// Si una fórmula da error, se vuelve a escribir con la siguiente inscripción.
 function actualizarResumen(evento) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sheet = ss.getSheetByName(RESUMEN);
@@ -96,9 +95,30 @@ function actualizarResumen(evento) {
     fila = sheet.getLastRow() + 1;
     sheet.getRange(fila, 1).setValue(evento);
   }
-  sheet.getRange(fila, 3, 1, 2).setFormulas([[
-    `=COUNTA('${evento}'!A2:A)`, `=IF(B${fila}="", "", B${fila}-C${fila})`
-  ]]);
+  const calculadas = sheet.getRange(fila, 3, 1, 2);
+  const nueva = eventos.indexOf(evento) === -1;
+  if (!nueva && !calculadas.getDisplayValues()[0].some(v => v.startsWith('#'))) return;
+  sheet.getRange(fila, 3).setFormula(`=COUNTA('${evento}'!A2:A)`);
+  escribirQuedan(sheet.getRange(fila, 4), fila);
+}
+
+// Las hojas en español separan con ";" y las en inglés con ",": se prueba
+// con las dos y se guarda la que funciona para no repetirlo.
+function escribirQuedan(celda, fila) {
+  const propiedades = PropertiesService.getScriptProperties();
+  const guardado = propiedades.getProperty('SEPARADOR');
+  const separadores = guardado ? [guardado] : [';', ','];
+  for (const sep of separadores) {
+    try {
+      celda.setFormula(`=IF(B${fila}=""${sep} ""${sep} B${fila}-C${fila})`);
+      SpreadsheetApp.flush();
+      if (!celda.getDisplayValue().startsWith('#')) {
+        propiedades.setProperty('SEPARADOR', sep);
+        return;
+      }
+    } catch (err) {}
+  }
+  celda.setFormula(`=B${fila}-C${fila}`);   // sin separadores: siempre funciona
 }
 
 function actualizarContacto(evento, data, ahora) {

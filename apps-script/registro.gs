@@ -21,10 +21,14 @@
    Qué hace con cada inscripción:
    - La apunta en una pestaña con el id del evento (p. ej. "halloween-yoga-2026").
      Si la pestaña no existe la crea, y si llega una pregunta nueva añade la columna.
+   - La primera vez que llega un evento lo añade a la pestaña "Resumen":
+     escribe tú las plazas en la columna "Plazas" y verás inscritas y plazas libres.
    - Actualiza la pestaña "Contactos": una fila por número de WhatsApp,
      con los eventos a los que se apuntó cada persona.
    ========================================================= */
 
+const RESUMEN = 'Resumen';
+const RESUMEN_COLUMNAS = ['Evento', 'Plazas', 'Inscritas', 'Quedan'];
 const CONTACTOS = 'Contactos';
 const CONTACTOS_COLUMNAS = ['WhatsApp', 'Nombre', 'Eventos', 'Primera inscripción', 'Última inscripción', 'Acepta novedades'];
 
@@ -49,7 +53,11 @@ function doPost(e) {
 
 function guardarInscripcion(evento, data, ahora) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const sheet = ss.getSheetByName(evento) || ss.insertSheet(evento);
+  let sheet = ss.getSheetByName(evento);
+  if (!sheet) {
+    sheet = ss.insertSheet(evento);
+    anadirAlResumen(evento);
+  }
   let columnas = sheet.getLastRow() ? sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0] : [];
   if (!columnas.length) {
     columnas = ['Fecha', 'nombre', 'whatsapp'];
@@ -64,6 +72,21 @@ function guardarInscripcion(evento, data, ahora) {
     }
   });
   sheet.appendRow(columnas.map(c => c === 'Fecha' ? ahora : limpiar(data[c])));
+}
+
+// Una fila por evento; las plazas las escribes tú, el resto se calcula solo
+function anadirAlResumen(evento) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(RESUMEN);
+  if (!sheet) {
+    sheet = ss.insertSheet(RESUMEN, 0);
+    sheet.getRange(1, 1, 1, RESUMEN_COLUMNAS.length).setValues([RESUMEN_COLUMNAS]).setFontWeight('bold');
+    sheet.setFrozenRows(1);
+  }
+  const fila = sheet.getLastRow() + 1;
+  sheet.getRange(fila, 1, 1, 4).setValues([[
+    evento, '', `=MAX(COUNTA('${evento}'!A:A)-1, 0)`, `=IF(B${fila}="", "", B${fila}-C${fila})`
+  ]]);
 }
 
 function actualizarContacto(evento, data, ahora) {

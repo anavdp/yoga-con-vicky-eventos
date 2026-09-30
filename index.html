@@ -59,35 +59,26 @@
   .event-kicker { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); }
   .event-name { font-family: 'Bebas Neue', sans-serif; font-size: 36px; line-height: .95; letter-spacing: 1px; }
 
-  .event-info { position: relative; margin: 14px 0 18px; font-size: clamp(12px, 3.6vw, 14px); font-weight: 600; letter-spacing: .5px; }
+  .event-info { position: relative; margin: 16px 0 0; font-size: clamp(14px, 4.2vw, 16px); font-weight: 600; letter-spacing: .5px; }
   .event-info .item { white-space: nowrap; }
   .event-info .sep { color: var(--accent); margin: 0 6px; }
 
   .event-top.con-precio { padding-right: 96px; }
 
-  /* Precio como estampilla */
-  .event-stamp {
-    position: absolute; top: 22px; right: 16px; z-index: 1;
+  /* Precio como etiqueta (price tag) */
+  .event-tag {
+    position: absolute; top: 24px; right: 18px; z-index: 1;
     transform: rotate(8deg);
-    padding: 5px; border-radius: 14px;
-    border: 2px dashed var(--accent);
-  }
-  .event-stamp span {
-    display: block; min-width: 62px; padding: 8px 10px 6px; border-radius: 10px;
-    font-family: 'Bebas Neue', sans-serif; font-size: 30px; line-height: 1; letter-spacing: 1px; text-align: center;
+    padding: 7px 12px 5px 24px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 28px; line-height: 1; letter-spacing: 1px;
     color: var(--btn-hover-text); background: var(--accent);
-    box-shadow: 0 6px 16px var(--glow);
+    border-radius: 4px 8px 8px 4px;
+    clip-path: polygon(14px 0, 100% 0, 100% 100%, 14px 100%, 0 50%);
   }
-
-  .event-bottom { position: relative; display: flex; align-items: center; gap: 12px; margin-top: 16px; }
-  .event-bottom .event-info { margin: 0; flex: 1; }
-  .event-go {
-    flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
-    font-size: 20px; font-weight: 800; line-height: 1;
-    color: var(--btn-text); background: var(--btn-bg); border: 2px solid var(--btn-border);
-    transition: transform .15s, background .15s, color .15s;
+  .event-tag::before {
+    content: ''; position: absolute; left: 11px; top: 50%; width: 7px; height: 7px; margin-top: -3.5px;
+    border-radius: 50%; background: var(--btn-hover-text);
   }
-  .event:hover .event-go, .event:focus-visible .event-go { transform: translateX(3px); color: var(--btn-hover-text); background: var(--btn-hover-bg); }
 
   /* Past events: compact and muted */
   .past { display: flex; flex-direction: column; gap: 10px; }
@@ -220,7 +211,7 @@ if (activos.length === 0) {
     card.setAttribute('aria-label', `Apuntarme a ${e.nombre}`);
     Object.entries(TEMAS[e.tema] || TEMAS.verano).forEach(([k, v]) => card.style.setProperty(k, v));
     card.innerHTML = `
-      ${e.precio ? `<div class="event-stamp"><span>${esc(e.precio)}</span></div>` : ''}
+      ${e.precio ? `<div class="event-tag">${esc(e.precio)}</div>` : ''}
       <div class="event-top${e.precio ? ' con-precio' : ''}">
         <span class="event-emoji">${esc(e.emoji)}</span>
         <div>
@@ -228,10 +219,7 @@ if (activos.length === 0) {
           <h3 class="event-name">${esc(e.nombre)}</h3>
         </div>
       </div>
-      <div class="event-bottom">
-        <p class="event-info">${[e.fecha, e.hora, e.lugar].filter(Boolean).map(x => `<span class="item">${esc(x)}</span>`).join('<span class="sep">·</span><wbr>')}</p>
-        <span class="event-go" aria-hidden="true">→</span>
-      </div>`;
+      <p class="event-info">${[e.fecha, e.hora, e.lugar].filter(Boolean).map(x => `<span class="item">${esc(x)}</span>`).join('<span class="sep">·</span><wbr>')}</p>`;
     activeEl.appendChild(card);
   });
 }

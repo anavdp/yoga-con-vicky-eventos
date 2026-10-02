@@ -81,25 +81,9 @@
   }
 
 
-  /* Early bird: OPCIONES PARA ELEGIR (?eb=a|b|c) */
-  .event-tag s { display: block; font-size: 17px; opacity: .65; text-decoration-thickness: 2px; }
-  .eb-a .event-tag { padding-top: 6px; text-align: center; }
-  .eb-hasta { position: absolute; z-index: 1; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
-  .eb-a .eb-hasta { top: 96px; right: 14px; transform: rotate(8deg); }
-
+  /* Early bird: la etiqueta muestra el precio rebajado y una franja explica hasta cuándo */
   .eb-strip { position: relative; display: inline-flex; align-items: baseline; gap: 6px; margin-top: 12px; padding: 5px 12px; border-radius: 100px; border: 1.5px dashed var(--accent); font-size: 12px; font-weight: 600; }
   .eb-strip b { color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase; font-size: 11px; }
-  .eb-strip s { opacity: .65; }
-
-  .eb-c .event-tag { opacity: .55; }
-  .eb-c .event-tag::after { content: ''; position: absolute; left: 10px; right: 6px; top: 50%; height: 3px; background: var(--btn-hover-text); transform: rotate(-12deg); }
-  .eb-sticker {
-    position: absolute; z-index: 2; top: 50px; right: 52px; width: 74px; height: 74px; border-radius: 50%;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; transform: rotate(-10deg);
-    background: var(--text); color: var(--btn-hover-text); box-shadow: 0 6px 16px rgba(0,0,0,.3);
-  }
-  .eb-sticker strong { font-family: 'Bebas Neue', sans-serif; font-size: 30px; line-height: .9; letter-spacing: 1px; }
-  .eb-sticker span { font-size: 9px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
 
   /* Past events: compact and muted */
   .past { display: flex; flex-direction: column; gap: 10px; }
@@ -221,8 +205,7 @@ const TEMAS = {
 // Early bird vigente si hoy (en Madrid) es como mucho el día "hasta"
 const hoyMadrid = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Madrid' });
 const earlyBird = e => e.earlyBird && hoyMadrid <= e.earlyBird.hasta ? e.earlyBird : null;
-const diaMes = (f, mes) => new Date(f + 'T12:00:00Z').toLocaleDateString('es-ES', { day: 'numeric', month: mes, timeZone: 'UTC' });
-const EB_ESTILO = new URLSearchParams(location.search).get('eb') || 'a';
+const diaMes = f => new Date(f + 'T12:00:00Z').toLocaleDateString('es-ES', { day: 'numeric', month: 'long', timeZone: 'UTC' });
 
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
@@ -240,22 +223,12 @@ if (activos.length === 0) {
     card.setAttribute('aria-label', `Apuntarme a ${e.nombre}`);
     Object.entries(TEMAS[e.tema] || TEMAS.verano).forEach(([k, v]) => card.style.setProperty(k, v));
     const eb = earlyBird(e);
-    let tag = e.precio ? `<div class="event-tag">${esc(e.precio)}</div>` : '';
-    let extra = '';
-    if (eb) {
-      card.classList.add('eb-' + EB_ESTILO);
-      if (EB_ESTILO === 'a') {
-        tag = `<div class="event-tag"><s>${esc(e.precio)}</s>${esc(eb.precio)}</div><div class="eb-hasta">hasta ${esc(diaMes(eb.hasta, 'short'))}</div>`;
-      } else if (EB_ESTILO === 'b') {
-        tag = `<div class="event-tag">${esc(eb.precio)}</div>`;
-        extra = `<p class="eb-strip"><b>Early bird</b> hasta el ${esc(diaMes(eb.hasta, 'long'))} · luego ${esc(e.precio)}</p>`;
-      } else {
-        tag += `<div class="eb-sticker"><strong>${esc(eb.precio)}</strong><span>hasta ${esc(diaMes(eb.hasta, 'short'))}</span></div>`;
-      }
-    }
+    const precio = eb ? eb.precio : e.precio;
+    const tag = precio ? `<div class="event-tag">${esc(precio)}</div>` : '';
+    const extra = eb ? `<p class="eb-strip"><b>Early bird</b> hasta el ${esc(diaMes(eb.hasta))} · luego ${esc(e.precio)}</p>` : '';
     card.innerHTML = `
       ${tag}
-      <div class="event-top${e.precio ? ' con-precio' : ''}">
+      <div class="event-top${precio ? ' con-precio' : ''}">
         <span class="event-emoji">${esc(e.emoji)}</span>
         <div>
           <p class="event-kicker">${esc(e.tipo)}</p>

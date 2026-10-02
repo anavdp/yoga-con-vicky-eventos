@@ -114,7 +114,7 @@ body { background: var(--page-bg); }
 .info .sep { color: var(--accent); margin: 0 6px; }
 
 /* Precio aparte (id f-precio); con early bird: precio normal tachado + precio rebajado */
-.precio { display: inline-flex; align-items: baseline; gap: 8px; margin-top: 12px; padding: 6px 16px; border-radius: 100px; border: 1.5px solid var(--accent); font-size: 15px; font-weight: 700; color: var(--ink); }
+.precio { display: inline-flex; align-items: baseline; gap: 8px; margin-top: 12px; padding: 6px 16px; border-radius: 100px; border: 1.5px dashed var(--accent); font-size: 15px; font-weight: 700; color: var(--ink); }
 .precio s { opacity: .6; font-weight: 600; text-decoration-color: var(--accent); text-decoration-thickness: 2px; }
 .precio strong { color: var(--accent-strong); font-size: 19px; }
 .precio .hasta { font-size: 12px; font-weight: 600; letter-spacing: .5px; opacity: .85; }

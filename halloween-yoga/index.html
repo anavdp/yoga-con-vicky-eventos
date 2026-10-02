@@ -116,7 +116,8 @@
       <span class="hero-emoji">🎃</span>
       <p class="kicker">Clase especial</p>
       <h1 class="title">Halloween <span>Yoga</span></h1>
-      <p class="info">30 Octubre<span class="sep">·</span>6:30 PM<span class="sep">·</span>Las Tablas<span class="sep">·</span>20 €</p>
+      <p class="info">30 Octubre<span class="sep">·</span>6:30 PM<span class="sep">·</span>Las Tablas</p>
+      <p class="precio" id="f-precio">20 €</p>
     </div>
 
     <div class="card">
@@ -185,7 +186,7 @@
       <div class="success" id="f-success">
         <span class="icon">🕸️</span>
         <p class="s-title">¡Ya casi!</p>
-        <p class="s-msg">Tu plaza queda <strong>reservada</strong>. Te escribiremos por WhatsApp para el pago (<strong>20 €</strong>, Bizum o efectivo) y así confirmar tu lugar.</p>
+        <p class="s-msg">Tu plaza queda <strong>reservada</strong>. Te escribiremos por WhatsApp para el pago (<strong data-precio>20 €</strong>, Bizum o efectivo) y así confirmar tu lugar.</p>
 
         <div class="s-box">
           📅 <strong>30 de octubre · 6:30 PM</strong><br>
@@ -228,7 +229,7 @@ const EVENTO = {
     descripcion: "Clase especial de Halloween Yoga. ¡Ven con tu disfraz, hay premio al mejor! 🏆"
   },
   compartir: "🎃 ¡Me apunté a Halloween Yoga! 30 de octubre, 6:30 PM en Las Tablas. Ven con tu disfraz, ¡hay premio al mejor! 🏆 Apúntate aquí:",
-  pago: { precio: "20 €" }
+  pago: { precio: "20 €", earlyBird: { precio: "15 €", hasta: "2026-10-10" } }
 };
 </script>
 <script src="../assets/form.js"></script>

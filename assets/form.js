@@ -16,12 +16,14 @@
      compartir: "🥊 ¡Me apunté al Power Bootcamp! … Apúntate aquí:",
      pago: { precio: "40 €", bizum: "600 000 000" },  // para el botón de WhatsApp del email de aviso;
                                                      // sin bizum usa el BIZUM del Apps Script
+       // opcional: earlyBird: { precio: "15 €", hasta: "2026-10-10" }  (hasta ese día incluido, hora de Madrid)
      hojaUrl: "https://script.google.com/…/exec"  // opcional: solo eventos con Apps Script propio
    };
 
    Y en el HTML usa estos ids: f-form, f-nombre, f-country, f-whatsapp,
    f-whatsapp-error, f-error, f-btn, f-btn-text, f-spinner, f-success,
-   cal-wrap, f-share. Cada pregunta con botones es un
+   cal-wrap, f-share. Opcionales: f-precio (precio con early bird) y
+   cualquier elemento con data-precio (se rellena con el precio de hoy). Cada pregunta con botones es un
    <div class="radio-group" data-campo="fotos" data-falta="mensaje si falta">
    con radios name="fotos"; se envía como { fotos: valor }.
    ========================================================= */
@@ -46,6 +48,38 @@ const PAISES = [
 const phoneRules = Object.fromEntries(PAISES.map(([code, , rule]) => [code, rule]));
 
 const $ = id => document.getElementById(id);
+
+/* ---------- Precio (con early bird opcional) ---------- */
+
+// Devuelve el early bird si hoy (en Madrid) es como mucho el día "hasta"
+function earlyBirdActivo() {
+  const eb = (EVENTO.pago || {}).earlyBird;
+  if (!eb) return null;
+  const hoy = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Madrid' });  // "2026-10-02"
+  return hoy <= eb.hasta ? eb : null;
+}
+
+function precioActual() {
+  const eb = earlyBirdActivo();
+  return eb ? eb.precio : (EVENTO.pago || {}).precio || '';
+}
+
+function mostrarPrecio() {
+  const eb = earlyBirdActivo();
+  const el = $('f-precio');
+  if (el) {
+    if (eb) {
+      const hasta = new Date(eb.hasta + 'T12:00:00Z')
+        .toLocaleDateString('es-ES', { day: 'numeric', month: 'long', timeZone: 'UTC' });
+      el.innerHTML = `<s>${EVENTO.pago.precio}</s> <strong>${eb.precio}</strong> <span class="hasta">hasta el ${hasta}</span>`;
+      el.classList.add('early');
+    } else {
+      el.textContent = EVENTO.pago.precio;
+    }
+  }
+  document.querySelectorAll('[data-precio]').forEach(x => { x.textContent = precioActual(); });
+}
+mostrarPrecio();
 
 /* ---------- Teléfono ---------- */
 
@@ -103,7 +137,7 @@ async function enviarInscripcion() {
     const pago = EVENTO.pago || {};
     datos.aviso = {
       nombre: EVENTO.nombre, inicio: EVENTO.calendario.inicio, lugar: EVENTO.calendario.lugar,
-      precio: pago.precio || '', bizum: pago.bizum || ''
+      precio: precioActual(), bizum: pago.bizum || ''
     };
   }
 
@@ -135,6 +169,7 @@ async function enviarInscripcion() {
       envio.catch(console.error);
       await Promise.race([envio, new Promise(r => setTimeout(r, 1500))]);
     }
+    mostrarPrecio();  // por si el early bird acabó con la página abierta
     $('f-form').style.display = 'none';
     $('f-success').style.display = 'block';
   } catch (err) {

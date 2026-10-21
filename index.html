@@ -45,6 +45,19 @@
   }
   .event:hover, .event:focus-visible { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(20,40,80,0.36), 0 0 0 3px var(--glow); outline: none; }
   .event:active { transform: translateY(-1px); }
+  /* Evento pospuesto: tarjeta en gris, sin enlace, con cinta de "obras" */
+  .event.pospuesto { cursor: default; --bg: linear-gradient(160deg, #F2F2F4 0%, #DCDCE2 100%); --text: #55565E; --accent: #8A8B94; --glow: transparent; --btn-hover-text: #FFFFFF; }
+  .event.pospuesto:hover, .event.pospuesto:active { transform: none; box-shadow: 0 14px 36px rgba(20,40,80,0.30); }
+  .event.pospuesto > :not(.cinta) { filter: grayscale(1); opacity: .75; }
+  .cinta {
+    position: relative; margin: 18px -30px 0; padding: 7px 0; transform: rotate(-3deg);
+    background: repeating-linear-gradient(-45deg, #FFD23F 0 16px, #1E1E1E 16px 32px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25); text-align: center;
+  }
+  .cinta span {
+    display: inline-block; padding: 4px 14px 2px; background: #FFD23F; color: #1E1E1E;
+    font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; line-height: 1;
+  }
   .event:nth-child(2) { animation-delay: .08s; }
   .event:nth-child(3) { animation-delay: .16s; }
   @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
@@ -138,7 +151,8 @@
    Para añadir un evento: copia un bloque, cambia los datos
    y pon "activo: true". "precio" es opcional. "earlyBird" también:
    { precio: "15 €", hasta: "2026-10-10" } (hasta ese día incluido, hora de Madrid). Para cerrarlo, "activo: false"
-   (pasa automáticamente a "Eventos pasados").
+   (pasa automáticamente a "Eventos pasados"). Si se pospone, "pospuesto: true": la tarjeta deja de llevar
+   al formulario, la fecha pasa a "Próximamente" y sale el aviso "Pospuesto hasta nuevo aviso".
    "carpeta" es el nombre de la carpeta en el repo.
    ========================================================= */
 const EVENTOS = [
@@ -152,6 +166,7 @@ const EVENTOS = [
     hora: "11:00 AM",
     lugar: "El Retiro",
     precio: "40 €",
+    pospuesto: true,
     tema: "otono"
   },
   {
@@ -209,7 +224,8 @@ const diaMes = f => new Date(f + 'T12:00:00Z').toLocaleDateString('es-ES', { day
 
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-const activos = EVENTOS.filter(e => e.activo);
+// Los pospuestos van al final
+const activos = EVENTOS.filter(e => e.activo).sort((a, b) => !!a.pospuesto - !!b.pospuesto);
 const pasados = EVENTOS.filter(e => !e.activo);
 
 const activeEl = document.getElementById('active');
@@ -217,15 +233,19 @@ if (activos.length === 0) {
   activeEl.innerHTML = `<div class="empty"><strong>Pronto habrá nuevos eventos ✨</strong>Sígueme en Instagram para enterarte.</div>`;
 } else {
   activos.forEach(e => {
-    const card = document.createElement('a');
-    card.className = 'event';
-    card.href = `./${encodeURIComponent(e.carpeta)}/`;
-    card.setAttribute('aria-label', `Apuntarme a ${e.nombre}`);
-    Object.entries(TEMAS[e.tema] || TEMAS.verano).forEach(([k, v]) => card.style.setProperty(k, v));
+    const card = document.createElement(e.pospuesto ? 'div' : 'a');
+    card.className = e.pospuesto ? 'event pospuesto' : 'event';
+    if (!e.pospuesto) {
+      card.href = `./${encodeURIComponent(e.carpeta)}/`;
+      card.setAttribute('aria-label', `Apuntarme a ${e.nombre}`);
+    }
+    if (!e.pospuesto) Object.entries(TEMAS[e.tema] || TEMAS.verano).forEach(([k, v]) => card.style.setProperty(k, v));
     const eb = earlyBird(e);
     const precio = eb ? eb.precio : e.precio;
     const tag = precio ? `<div class="event-tag">${esc(precio)}</div>` : '';
-    const extra = eb ? `<p class="eb-strip"><b>Early bird</b> hasta el ${esc(diaMes(eb.hasta))} · luego ${esc(e.precio)}</p>` : '';
+    const extra = e.pospuesto ? `<div class="cinta"><span>Pospuesto hasta nuevo aviso</span></div>`
+      : eb ? `<p class="eb-strip"><b>Early bird</b> hasta el ${esc(diaMes(eb.hasta))} · luego ${esc(e.precio)}</p>` : '';
+    const info = e.pospuesto ? ['Próximamente', e.lugar] : [e.fecha, e.hora, e.lugar];
     card.innerHTML = `
       ${tag}
       <div class="event-top${precio ? ' con-precio' : ''}">
@@ -235,7 +255,7 @@ if (activos.length === 0) {
           <h3 class="event-name">${esc(e.nombre)}</h3>
         </div>
       </div>
-      <p class="event-info">${[e.fecha, e.hora, e.lugar].filter(Boolean).map(x => `<span class="item">${esc(x)}</span>`).join('<span class="sep">·</span><wbr>')}</p>${extra}`;
+      <p class="event-info">${info.filter(Boolean).map(x => `<span class="item">${esc(x)}</span>`).join('<span class="sep">·</span><wbr>')}</p>${extra}`;
     activeEl.appendChild(card);
   });
 }

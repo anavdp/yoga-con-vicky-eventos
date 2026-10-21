@@ -17,12 +17,13 @@
      pago: { precio: "40 €", bizum: "600 000 000" },  // para el botón de WhatsApp del email de aviso;
                                                      // sin bizum usa el BIZUM del Apps Script
        // opcional: earlyBird: { precio: "15 €", hasta: "2026-10-10" }  (hasta ese día incluido, hora de Madrid)
+       // opcional: amiga: "15 €"  (precio por persona si vienen dos amigas)
      hojaUrl: "https://script.google.com/…/exec"  // opcional: solo eventos con Apps Script propio
    };
 
    Y en el HTML usa estos ids: f-form, f-nombre, f-country, f-whatsapp,
    f-whatsapp-error, f-error, f-btn, f-btn-text, f-spinner, f-success,
-   cal-wrap, f-share. Opcionales: f-precio (precio con early bird) y
+   cal-wrap, f-share. Opcionales: f-precio (precio con early bird u oferta amiga) y
    cualquier elemento con data-precio (se rellena con el precio de hoy). Cada pregunta con botones es un
    <div class="radio-group" data-campo="fotos" data-falta="mensaje si falta">
    con radios name="fotos"; se envía como { fotos: valor }.
@@ -61,7 +62,10 @@ function earlyBirdActivo() {
 
 function precioActual() {
   const eb = earlyBirdActivo();
-  return eb ? eb.precio : (EVENTO.pago || {}).precio || '';
+  if (eb) return eb.precio;
+  const pago = EVENTO.pago || {};
+  if (pago.amiga) return `${pago.precio}, o ${pago.amiga} cada una si venís con una amiga`;
+  return pago.precio || '';
 }
 
 function mostrarPrecio() {
@@ -73,6 +77,10 @@ function mostrarPrecio() {
         .toLocaleDateString('es-ES', { day: 'numeric', month: 'long', timeZone: 'UTC' });
       el.innerHTML = `<s>${EVENTO.pago.precio}</s> <strong>${eb.precio}</strong> <span class="hasta">hasta el ${hasta}</span>`;
       el.classList.add('early');
+    } else if (EVENTO.pago.amiga) {
+      el.innerHTML = `<span>👯‍♀️ Con una amiga <strong>${EVENTO.pago.amiga}</strong> <span class="hasta">cada una</span></span>` +
+        `<span class="sola">Si vienes sola: ${EVENTO.pago.precio}</span>`;
+      el.classList.add('doble');
     } else {
       el.textContent = EVENTO.pago.precio;
     }

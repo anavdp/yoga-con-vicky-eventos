@@ -64,7 +64,7 @@ function precioActual() {
   const eb = earlyBirdActivo();
   if (eb) return eb.precio;
   const pago = EVENTO.pago || {};
-  if (pago.amiga) return `${pago.precio}, o ${pago.amiga} cada una si venís con una amiga`;
+  if (pago.amiga) return `${pago.precio}, o ${pago.amiga} cada una si vienes con una amiga`;
   return pago.precio || '';
 }
 

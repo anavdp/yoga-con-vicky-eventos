@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini sesión navideña · Eventi e Luce</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/forms.css">
+<style>
+  /* Paleta navideña clásica: burdeos, verde abeto, marfil y oro viejo */
+  :root {
+    --page-bg: #F1EADF;
+    --wrap-bg:
+      radial-gradient(ellipse at 100% 0%, rgba(104,31,43,0.16) 0%, transparent 50%),
+      radial-gradient(ellipse at 0% 100%, rgba(36,61,50,0.16) 0%, transparent 50%),
+      linear-gradient(170deg, #F7F2EA 0%, #F1EADF 60%, #EAE0D0 100%);
+    --ink: #243D32;
+    --accent: #681F2B;
+    --accent-strong: #8A6D3B;
+    --on-accent: #F1EADF;
+    --highlight: #E4D5B5;
+
+    --blob1: #681F2B; --blob1-opacity: 0.16;
+    --blob2: #A18450; --blob2-opacity: 0.25;
+
+    --card-bg: rgba(255,252,247,0.78);
+    --card-border: rgba(161,132,80,0.40);
+    --card-shadow: 0 14px 40px rgba(36,61,50,0.12);
+    --input-bg: #FFFFFF;
+    --input-border: #DCCFB6;
+    --input-text: #243D32;
+    --placeholder: #A18450;
+    --focus-ring: rgba(104,31,43,0.20);
+    --option-bg: #F8F3EA;
+    --option-border: #DCCFB6;
+    --option-hover: #EFE6D6;
+    --option-shadow: 0 6px 18px rgba(104,31,43,0.35);
+    --divider: rgba(36,61,50,0.14);
+
+    --btn-bg: #681F2B;
+    --btn-text: #F1EADF;
+    --btn-border: #681F2B;
+    --btn-shadow: 0 8px 22px rgba(104,31,43,0.28);
+    --btn-hover-bg: #243D32;
+    --btn-hover-text: #F1EADF;
+    --btn-hover-shadow: 0 10px 28px rgba(36,61,50,0.35);
+    --spinner: #F1EADF;
+    --spinner-track: rgba(241,234,223,0.35);
+
+    --footer-text: rgba(36,61,50,0.7);
+    --footer-underline: #A18450;
+    --footer-hover: #681F2B;
+    --success-title: #681F2B;
+    --link-underline: rgba(161,132,80,0.6);
+    --box-bg: #F8F3EA;
+    --box-border: #DCCFB6;
+    --box-strong: #681F2B;
+
+    --picker-border: #DCCFB6;
+    --picker-hover: #F8F3EA;
+
+    --deco-opacity: 0.6;
+    --deco-anim: snow 8s ease-in-out infinite;
+  }
+
+  @keyframes snow {
+    0%,100% { transform: translate(0,0) rotate(-8deg); }
+    50% { transform: translate(6px,14px) rotate(8deg); }
+  }
+
+  /* Logo de Eventi e Luce (recoloreado en burdeos) en lugar del emoji grande */
+  .logo { display: block; width: 92px; height: 92px; margin: 0 auto 10px; }
+  .title { font-size: 58px; }
+  .edition { background: var(--highlight); color: #243D32; }
+
+  .incluye { margin-top: 22px; padding: 16px 18px; border-radius: 16px; background: #F8F3EA; border: 1.5px solid #DCCFB6; text-align: left; }
+  .incluye-titulo { margin: 0 0 8px; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #681F2B; }
+  .incluye ul { list-style: none; display: grid; gap: 5px; font-size: 14px; line-height: 1.4; color: #243D32; }
+  .incluye li::before { content: '✦'; color: #A18450; margin-right: 8px; }
+
+  .nota { margin-top: 12px; padding: 12px 16px; border-radius: 16px; font-size: 13.5px; line-height: 1.45; text-align: center; }
+  .nota.verde { background: rgba(36,61,50,0.08); border: 1.5px dashed #243D32; color: #243D32; }
+  .nota.oro { background: rgba(161,132,80,0.14); border: 1.5px solid rgba(161,132,80,0.5); color: #243D32; }
+  .nota strong { color: #681F2B; }
+
+  .s-box.oro { background: rgba(161,132,80,0.14); border-color: rgba(161,132,80,0.5); }
+  .s-logos img { width: 76px; height: 76px; }
+
+  @media (max-width: 480px) {
+    .logo { width: 64px; height: 64px; margin-bottom: 6px; }
+    .title { font-size: 42px; }
+    .incluye { margin-top: 14px; padding: 12px 14px; }
+    .incluye ul { font-size: 13px; gap: 3px; }
+    .nota { padding: 9px 12px; font-size: 12.5px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <span class="deco deco1">❄️</span>
+  <span class="deco deco2">✨</span>
+  <span class="deco deco3">❄️</span>
+
+  <div class="inner">
+    <div class="header">
+      <img class="logo" src="../eventieluce-burdeos.png" alt="Eventi e Luce" />
+      <p class="kicker">Eventi e Luce</p>
+      <h1 class="title">Mini sesión <span>navideña</span></h1>
+      <span class="edition">🎄 Navidad 2026 📸</span>
+      <p class="info">Sáb 7 Noviembre<span class="sep">·</span>30 minutos<span class="sep">·</span>Madrid</p>
+    </div>
+
+    <div class="card">
+      <div id="f-form">
+        <div class="field">
+          <label for="f-nombre">Nombre completo</label>
+          <input type="text" id="f-nombre" placeholder="¿Cómo te llamas?" autocomplete="name" />
+        </div>
+
+        <div class="field">
+          <label for="f-whatsapp">Número de WhatsApp</label>
+          <div class="phone-row">
+            <select id="f-country" aria-label="Código de país"></select>
+            <input type="tel" id="f-whatsapp" inputmode="numeric" placeholder="612 345 678" autocomplete="tel-national" maxlength="15" />
+          </div>
+          <p class="field-error" id="f-whatsapp-error"></p>
+        </div>
+
+        <div class="field">
+          <label>Tamaño del grupo familiar</label>
+          <div class="radio-group" data-campo="grupo" data-falta="¿Cuántas personas vienen a la sesión? 👨‍👩‍👧">
+            <div class="radio-option">
+              <input type="radio" name="grupo" id="grupo-1" value="2" />
+              <label for="grupo-1"><span class="emoji">👫</span>2</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="grupo" id="grupo-2" value="3" />
+              <label for="grupo-2"><span class="emoji">👨‍👩‍👦</span>3</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="grupo" id="grupo-3" value="4+" />
+              <label for="grupo-3"><span class="emoji">👨‍👩‍👧‍👦</span>4+</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>¿Qué turno te viene mejor?</label>
+          <div class="radio-group" data-campo="turno" data-falta="¿Qué turno te viene mejor, mañana o tarde? ⏰">
+            <div class="radio-option">
+              <input type="radio" name="turno" id="turno-1" value="Mañana" />
+              <label for="turno-1"><span class="emoji">☀️</span>Mañana</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="turno" id="turno-2" value="Tarde" />
+              <label for="turno-2"><span class="emoji">🌙</span>Tarde</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="field">
+          <label>¿Ya has confiado en nosotros?</label>
+          <div class="radio-group" data-campo="cliente" data-falta="Cuéntanos si ya has sido cliente de Eventi e Luce 💚">
+            <div class="radio-option">
+              <input type="radio" name="cliente" id="cliente-1" value="Sí" />
+              <label for="cliente-1"><span class="emoji">💚</span>Sí</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="cliente" id="cliente-2" value="No" />
+              <label for="cliente-2"><span class="emoji">✨</span>No, es mi primera vez</label>
+            </div>
+          </div>
+        </div>
+        <div class="nota verde">💚 Tenemos un <strong>precio especial</strong> para nuestros clientes habituales.</div>
+
+        <div class="incluye">
+          <p class="incluye-titulo">🎁 ¿Qué incluye?</p>
+          <ul>
+            <li>30 minutos de sesión fotográfica</li>
+            <li>1 set navideño exclusivo</li>
+            <li>10 fotografías digitales en galería online</li>
+            <li>Corrección de color y retoques básicos</li>
+            <li>Un detalle especial para la familia</li>
+          </ul>
+        </div>
+
+        <div class="nota oro">📌 Reserva tu plaza abonando el <strong>50 %</strong> del importe y paga el resto el día de la sesión.</div>
+
+        <div class="error-msg" id="f-error">😅 Algo salió mal, por favor inténtalo de nuevo.</div>
+
+        <button class="submit-btn" id="f-btn">
+          <span id="f-btn-text">¡Me apunto! 🎄</span>
+          <span class="spinner" id="f-spinner"></span>
+        </button>
+      </div>
+
+      <div class="success" id="f-success">
+        <span class="icon">🎅🏻</span>
+        <p class="s-title">¡Gracias!</p>
+        <p class="s-msg"><strong>¡Te responderemos en breve para reservar tu plaza!</strong> ✨📸</p>
+
+        <div class="s-box">
+          📅 <strong>Sábado 7 de noviembre</strong> · sesión de 30 minutos<br>
+          📍 Madrid (te enviaremos la ubicación exacta)
+        </div>
+        <div class="s-box oro">
+          📌 Reserva tu plaza abonando el <strong>50 %</strong> del importe y paga el resto el día de la sesión.
+        </div>
+        <p class="s-msg" style="margin-top:18px; font-size:14px;">Las sonrisas, los abrazos y la ilusión de la Navidad merecen convertirse en recuerdos para siempre. 🎅🏻❤️</p>
+
+        <button class="submit-btn share-btn" id="f-share">Compártelo 🎄📸</button>
+
+        <div class="s-logos">
+          <img src="../eventieluce-burdeos.png" alt="Eventi e Luce" />
+        </div>
+      </div>
+    </div>
+
+    <p class="footer">
+      Organizado por
+      <a href="https://instagram.com/eventieluce" target="_blank" rel="noopener">@eventieluce</a>
+    </p>
+  </div>
+</div>
+
+<script>
+const EVENTO = {
+  id: "mini-sesion-navidena-2026",
+  nombre: "Mini sesión navideña 2026",
+  archivo: "mini-sesion-navidena",
+  // Sin hora fija (turno de mañana o tarde): no hay botón de calendario
+  calendario: {
+    titulo: "Mini sesión navideña 🎄📸 Eventi e Luce",
+    inicio: "2026-11-07",
+    lugar: "Madrid",
+    descripcion: "Mini sesión fotográfica navideña de 30 minutos con Eventi e Luce."
+  },
+  compartir: "🎄📸 ¡Reservé una mini sesión navideña con Eventi e Luce! 7 de noviembre en Madrid: 30 minutos de fotos en un set navideño exclusivo. Reserva la tuya aquí:",
+  pago: {
+    mensaje: "Para reservar tu plaza se abona el 50 % del importe y el resto se paga el día de la sesión. Te paso el importe y los datos para el pago. ¿Qué hora te viene mejor dentro de tu turno?"
+  }
+};
+</script>
+<script src="../assets/form.js"></script>
+</body>
+</html>

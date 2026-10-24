@@ -9,6 +9,10 @@
    3. (Opcional) Para recibir un email con cada inscripción:
       Configuración del proyecto → Propiedades del script → añade
       AVISO_EMAIL = tu correo.
+      Si un evento debe avisar a otro correo (p. ej. un evento de un cliente),
+      añade AVISO_EMAIL_ seguido del id del evento, p. ej.
+      AVISO_EMAIL_mini-sesion-navidena-2026 = correo@cliente.com
+      (varios correos separados por comas). Ese evento usa ese correo en lugar de AVISO_EMAIL.
       Y para que el botón de WhatsApp del email incluya tu Bizum,
       añade también BIZUM = tu número (un evento puede poner otro en su formulario).
    4. Implementar → Nueva implementación → Tipo "Aplicación web".
@@ -149,7 +153,7 @@ function actualizarContacto(evento, data, ahora) {
 
 function avisar(evento, data, aviso) {
   const propiedades = PropertiesService.getScriptProperties();
-  const email = propiedades.getProperty('AVISO_EMAIL');
+  const email = propiedades.getProperty('AVISO_EMAIL_' + evento) || propiedades.getProperty('AVISO_EMAIL');
   if (!email) return;
   const titulo = limpiar(aviso.nombre) || evento;
   const filas = Object.keys(data).map(k => `<p><b>${k}:</b> ${escapar(data[k])}</p>`).join('');
@@ -172,12 +176,15 @@ function botonPago(data, aviso, bizumPorDefecto) {
   const lugar = texto(aviso.lugar);
   const precio = texto(aviso.precio);
   const bizum = texto(aviso.bizum) || texto(bizumPorDefecto);
+  const mensajePago = String(aviso.mensajePago || '').trim().slice(0, 500);   // texto del pago propio del evento (EVENTO.pago.mensaje)
 
   let mensaje = `Hola ${nombre}, ¡gracias por apuntarte a ${evento}! 💜\n\n`;
   if (cuando) mensaje += `📅 ${cuando}\n`;
   if (lugar) mensaje += `📍 ${lugar}: https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lugar)}\n`;
   if (cuando || lugar) mensaje += '\n';
-  if (bizum) {
+  if (mensajePago) {
+    mensaje += mensajePago;
+  } else if (bizum) {
     mensaje += `Para confirmar tu plaza${precio ? ` (${precio})` : ''} puedes hacerme un Bizum al ${bizum} con tu nombre en el concepto, ` +
       'o si lo prefieres pagar en efectivo el mismo día. ¿Cómo te viene mejor?';
   } else {

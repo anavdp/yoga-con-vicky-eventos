@@ -18,12 +18,14 @@
                                                      // sin bizum usa el BIZUM del Apps Script
        // opcional: earlyBird: { precio: "15 €", hasta: "2026-10-10" }  (hasta ese día incluido, hora de Madrid)
        // opcional: amiga: "15 €"  (precio por persona si vienen dos amigas)
+       // opcional: mensaje: "…"  (texto del pago en el WhatsApp, en lugar del de Bizum o efectivo)
      hojaUrl: "https://script.google.com/…/exec"  // opcional: solo eventos con Apps Script propio
    };
 
    Y en el HTML usa estos ids: f-form, f-nombre, f-country, f-whatsapp,
    f-whatsapp-error, f-error, f-btn, f-btn-text, f-spinner, f-success,
-   cal-wrap, f-share. Opcionales: f-precio (precio con early bird u oferta amiga) y
+   f-share. Opcionales: cal-wrap (sin él no hay botón de calendario; útil si
+   aún no hay hora: calendario.inicio puede ser solo "YYYY-MM-DD"), f-precio (precio con early bird u oferta amiga) y
    cualquier elemento con data-precio (se rellena con el precio de hoy). Cada pregunta con botones es un
    <div class="radio-group" data-campo="fotos" data-falta="mensaje si falta">
    con radios name="fotos"; se envía como { fotos: valor }.
@@ -145,7 +147,7 @@ async function enviarInscripcion() {
     const pago = EVENTO.pago || {};
     datos.aviso = {
       nombre: EVENTO.nombre, inicio: EVENTO.calendario.inicio, lugar: EVENTO.calendario.lugar,
-      precio: precioActual(), bizum: pago.bizum || ''
+      precio: precioActual(), bizum: pago.bizum || '', mensajePago: pago.mensaje || ''
     };
   }
 
@@ -189,126 +191,130 @@ $('f-btn').addEventListener('click', enviarInscripcion);
 
 /* ---------- Calendario ---------- */
 
-// "2026-10-18 11:00" en hora de Madrid -> Date en UTC
-function madridAUtc(texto) {
-  const [y, m, d, h, min] = texto.split(/[-: T]/).map(Number);
-  const local = Date.UTC(y, m - 1, d, h, min);
-  const fmt = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'Europe/Madrid', hourCycle: 'h23',
-    year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
-  });
-  const offset = t => {
-    const p = Object.fromEntries(fmt.formatToParts(new Date(t)).map(x => [x.type, x.value]));
-    return Date.UTC(+p.year, p.month - 1, +p.day, +p.hour, +p.minute) - t;
+// Sin #cal-wrap no hay botón de calendario (p. ej. eventos aún sin hora)
+if ($('cal-wrap')) {
+
+  // "2026-10-18 11:00" en hora de Madrid -> Date en UTC
+  function madridAUtc(texto) {
+    const [y, m, d, h, min] = texto.split(/[-: T]/).map(Number);
+    const local = Date.UTC(y, m - 1, d, h, min);
+    const fmt = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Europe/Madrid', hourCycle: 'h23',
+      year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+    });
+    const offset = t => {
+      const p = Object.fromEntries(fmt.formatToParts(new Date(t)).map(x => [x.type, x.value]));
+      return Date.UTC(+p.year, p.month - 1, +p.day, +p.hour, +p.minute) - t;
+    };
+    return new Date(local - offset(local - offset(local)));
+  }
+
+  const cal = EVENTO.calendario;
+  const calInicio = madridAUtc(cal.inicio);
+  const calFin = madridAUtc(cal.fin);
+  const icsDate = d => d.toISOString().replace(/\.\d{3}/, '').replace(/[-:]/g, '');   // 20261018T090000Z
+  const isoDate = d => d.toISOString().replace(/\.\d{3}/, '');                          // 2026-10-18T09:00:00Z
+
+  const CAL_ICONOS = {
+    google: `<span class="cal-icon" style="background:#fff; border:1.5px solid #e8e8e8;">
+        <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.717v2.258h2.908C16.657 14.253 17.64 11.945 17.64 9.2z"/>
+          <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258a5.37 5.37 0 0 1-8.009-2.452H.957v2.332A9 9 0 0 0 9 18z"/>
+          <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.961H.957A9 9 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.329z"/>
+          <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A9 9 0 0 0 .957 4.96l3.007 2.332C4.672 5.163 6.656 3.58 9 3.58z"/>
+        </svg>
+      </span>`,
+    apple: `<span class="cal-icon" style="background:#FF3B30;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="5" width="18" height="16" rx="3" stroke="white" stroke-width="1.6" fill="rgba(255,255,255,0.15)"/>
+          <path d="M3 10h18" stroke="white" stroke-width="1.6"/>
+          <path d="M8 3v4M16 3v4" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+          <text x="12" y="20" text-anchor="middle" font-size="7.5" font-weight="700" fill="white" font-family="sans-serif">${+cal.inicio.slice(8, 10)}</text>
+        </svg>
+      </span>`,
+    outlook: `<span class="cal-icon" style="background:#0078D4;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="5" width="18" height="16" rx="3" stroke="white" stroke-width="1.6" fill="rgba(255,255,255,0.15)"/>
+          <path d="M3 10h18" stroke="white" stroke-width="1.6"/>
+          <path d="M8 3v4M16 3v4" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="8.5" cy="15.5" r="1.2" fill="white"/>
+          <circle cx="12" cy="15.5" r="1.2" fill="white"/>
+          <circle cx="15.5" cy="15.5" r="1.2" fill="white"/>
+        </svg>
+      </span>`
   };
-  return new Date(local - offset(local - offset(local)));
-}
 
-const cal = EVENTO.calendario;
-const calInicio = madridAUtc(cal.inicio);
-const calFin = madridAUtc(cal.fin);
-const icsDate = d => d.toISOString().replace(/\.\d{3}/, '').replace(/[-:]/g, '');   // 20261018T090000Z
-const isoDate = d => d.toISOString().replace(/\.\d{3}/, '');                          // 2026-10-18T09:00:00Z
+  $('cal-wrap').innerHTML = `
+    <div class="cal-picker" id="cal-picker" style="display:none;">
+      <button class="cal-option" data-cal="google">${CAL_ICONOS.google} Google Calendar</button>
+      <button class="cal-option" data-cal="apple">${CAL_ICONOS.apple} Apple Calendar</button>
+      <button class="cal-option" data-cal="outlook">${CAL_ICONOS.outlook} Outlook</button>
+    </div>
+    <button class="submit-btn" id="cal-toggle">📅 Añadir al calendario</button>`;
 
-const CAL_ICONOS = {
-  google: `<span class="cal-icon" style="background:#fff; border:1.5px solid #e8e8e8;">
-      <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-        <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.717v2.258h2.908C16.657 14.253 17.64 11.945 17.64 9.2z"/>
-        <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258a5.37 5.37 0 0 1-8.009-2.452H.957v2.332A9 9 0 0 0 9 18z"/>
-        <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.961H.957A9 9 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.329z"/>
-        <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A9 9 0 0 0 .957 4.96l3.007 2.332C4.672 5.163 6.656 3.58 9 3.58z"/>
-      </svg>
-    </span>`,
-  apple: `<span class="cal-icon" style="background:#FF3B30;">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="3" y="5" width="18" height="16" rx="3" stroke="white" stroke-width="1.6" fill="rgba(255,255,255,0.15)"/>
-        <path d="M3 10h18" stroke="white" stroke-width="1.6"/>
-        <path d="M8 3v4M16 3v4" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
-        <text x="12" y="20" text-anchor="middle" font-size="7.5" font-weight="700" fill="white" font-family="sans-serif">${+cal.inicio.slice(8, 10)}</text>
-      </svg>
-    </span>`,
-  outlook: `<span class="cal-icon" style="background:#0078D4;">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="3" y="5" width="18" height="16" rx="3" stroke="white" stroke-width="1.6" fill="rgba(255,255,255,0.15)"/>
-        <path d="M3 10h18" stroke="white" stroke-width="1.6"/>
-        <path d="M8 3v4M16 3v4" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
-        <circle cx="8.5" cy="15.5" r="1.2" fill="white"/>
-        <circle cx="12" cy="15.5" r="1.2" fill="white"/>
-        <circle cx="15.5" cy="15.5" r="1.2" fill="white"/>
-      </svg>
-    </span>`
-};
-
-$('cal-wrap').innerHTML = `
-  <div class="cal-picker" id="cal-picker" style="display:none;">
-    <button class="cal-option" data-cal="google">${CAL_ICONOS.google} Google Calendar</button>
-    <button class="cal-option" data-cal="apple">${CAL_ICONOS.apple} Apple Calendar</button>
-    <button class="cal-option" data-cal="outlook">${CAL_ICONOS.outlook} Outlook</button>
-  </div>
-  <button class="submit-btn" id="cal-toggle">📅 Añadir al calendario</button>`;
-
-function toggleCalPicker(e) {
-  e.stopPropagation();
-  const picker = $('cal-picker');
-  if (picker.style.display !== 'none') {
-    picker.style.display = 'none';
-  } else {
-    picker.style.display = 'block';
-    picker.style.animation = 'none';
-    picker.offsetHeight;
-    picker.style.animation = '';
+  function toggleCalPicker(e) {
+    e.stopPropagation();
+    const picker = $('cal-picker');
+    if (picker.style.display !== 'none') {
+      picker.style.display = 'none';
+    } else {
+      picker.style.display = 'block';
+      picker.style.animation = 'none';
+      picker.offsetHeight;
+      picker.style.animation = '';
+    }
   }
-}
 
-document.addEventListener('click', function(e) {
-  if (!$('cal-wrap').contains(e.target)) $('cal-picker').style.display = 'none';
-});
+  document.addEventListener('click', function(e) {
+    if (!$('cal-wrap').contains(e.target)) $('cal-picker').style.display = 'none';
+  });
 
-function calSelect(type) {
-  $('cal-picker').style.display = 'none';
-  const enc = encodeURIComponent;
-  if (type === 'google') {
-    window.open(
-      'https://calendar.google.com/calendar/render?action=TEMPLATE' +
-      '&text=' + enc(cal.titulo) +
-      '&dates=' + icsDate(calInicio) + '%2F' + icsDate(calFin) +
-      '&details=' + enc(cal.descripcion) +
-      '&location=' + enc(cal.lugar),
-      '_blank', 'noopener'
-    );
-  } else if (type === 'outlook') {
-    window.open(
-      'https://outlook.live.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose&rru=addevent' +
-      '&subject=' + enc(cal.titulo) +
-      '&startdt=' + enc(isoDate(calInicio)) + '&enddt=' + enc(isoDate(calFin)) +
-      '&location=' + enc(cal.lugar) +
-      '&body=' + enc(cal.descripcion),
-      '_blank', 'noopener'
-    );
-  } else {
-    const ics = [
-      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//' + EVENTO.nombre + '//ES',
-      'BEGIN:VEVENT',
-      'UID:' + EVENTO.id + '@yogaconvicky',
-      'DTSTAMP:' + icsDate(calInicio),
-      'DTSTART:' + icsDate(calInicio), 'DTEND:' + icsDate(calFin),
-      'SUMMARY:' + cal.titulo,
-      'LOCATION:' + cal.lugar.replace(/,/g, '\\,'),
-      'DESCRIPTION:' + cal.descripcion.replace(/,/g, '\\,'),
-      'END:VEVENT', 'END:VCALENDAR'
-    ].join('\r\n');
-    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = EVENTO.archivo + '.ics';
-    document.body.appendChild(a); a.click();
-    document.body.removeChild(a); URL.revokeObjectURL(url);
+  function calSelect(type) {
+    $('cal-picker').style.display = 'none';
+    const enc = encodeURIComponent;
+    if (type === 'google') {
+      window.open(
+        'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+        '&text=' + enc(cal.titulo) +
+        '&dates=' + icsDate(calInicio) + '%2F' + icsDate(calFin) +
+        '&details=' + enc(cal.descripcion) +
+        '&location=' + enc(cal.lugar),
+        '_blank', 'noopener'
+      );
+    } else if (type === 'outlook') {
+      window.open(
+        'https://outlook.live.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose&rru=addevent' +
+        '&subject=' + enc(cal.titulo) +
+        '&startdt=' + enc(isoDate(calInicio)) + '&enddt=' + enc(isoDate(calFin)) +
+        '&location=' + enc(cal.lugar) +
+        '&body=' + enc(cal.descripcion),
+        '_blank', 'noopener'
+      );
+    } else {
+      const ics = [
+        'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//' + EVENTO.nombre + '//ES',
+        'BEGIN:VEVENT',
+        'UID:' + EVENTO.id + '@yogaconvicky',
+        'DTSTAMP:' + icsDate(calInicio),
+        'DTSTART:' + icsDate(calInicio), 'DTEND:' + icsDate(calFin),
+        'SUMMARY:' + cal.titulo,
+        'LOCATION:' + cal.lugar.replace(/,/g, '\\,'),
+        'DESCRIPTION:' + cal.descripcion.replace(/,/g, '\\,'),
+        'END:VEVENT', 'END:VCALENDAR'
+      ].join('\r\n');
+      const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = EVENTO.archivo + '.ics';
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a); URL.revokeObjectURL(url);
+    }
   }
-}
 
-$('cal-toggle').addEventListener('click', toggleCalPicker);
-$('cal-picker').querySelectorAll('.cal-option').forEach(b =>
-  b.addEventListener('click', () => calSelect(b.dataset.cal)));
+  $('cal-toggle').addEventListener('click', toggleCalPicker);
+  $('cal-picker').querySelectorAll('.cal-option').forEach(b =>
+    b.addEventListener('click', () => calSelect(b.dataset.cal)));
+}
 
 /* ---------- Compartir ---------- */
 

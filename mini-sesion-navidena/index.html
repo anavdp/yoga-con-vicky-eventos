@@ -83,6 +83,18 @@
   .nota.oro { background: rgba(161,132,80,0.14); border: 1.5px solid rgba(161,132,80,0.5); color: #243D32; }
   .nota strong { color: #681F2B; }
 
+  /* Selector de número de asistentes (1 a 10) */
+  .contador { align-items: center; justify-content: space-between; padding: 6px; border-radius: 14px; border: 1.5px solid var(--option-border); background: var(--option-bg); }
+  .contador-btn {
+    width: 46px; height: 46px; flex-shrink: 0; border-radius: 12px; border: none;
+    background: #681F2B; color: #F1EADF; font: 700 24px 'Poppins', sans-serif; line-height: 1; cursor: pointer;
+    transition: background .15s, opacity .15s;
+  }
+  .contador-btn:hover { background: #243D32; }
+  .contador-btn:disabled { opacity: .3; cursor: not-allowed; background: #681F2B; }
+  .contador-num { font-size: 15px; font-weight: 600; color: #243D32; }
+  .contador-num strong { font-family: 'Bebas Neue', sans-serif; font-size: 32px; font-weight: 400; color: #681F2B; vertical-align: -3px; margin-right: 2px; }
+
   .s-box.oro { background: rgba(161,132,80,0.14); border-color: rgba(161,132,80,0.5); }
   .s-logos img { width: 76px; height: 76px; }
 
@@ -129,20 +141,13 @@
         </div>
 
         <div class="field">
-          <label>Tamaño del grupo familiar</label>
-          <div class="radio-group" data-campo="grupo" data-falta="¿Cuántas personas vienen a la sesión? 👨‍👩‍👧">
-            <div class="radio-option">
-              <input type="radio" name="grupo" id="grupo-1" value="2" />
-              <label for="grupo-1"><span class="emoji">👫</span>2</label>
-            </div>
-            <div class="radio-option">
-              <input type="radio" name="grupo" id="grupo-2" value="3" />
-              <label for="grupo-2"><span class="emoji">👨‍👩‍👦</span>3</label>
-            </div>
-            <div class="radio-option">
-              <input type="radio" name="grupo" id="grupo-3" value="4+" />
-              <label for="grupo-3"><span class="emoji">👨‍👩‍👧‍👦</span>4+</label>
-            </div>
+          <label>¿Cuántos asistirán?</label>
+          <!-- Selector − / +: el número va en un radio oculto para que form.js lo envíe como { asistentes: "3" } -->
+          <div class="radio-group contador" data-campo="asistentes" data-falta="¿Cuántas personas asistirán? 👨‍👩‍👧">
+            <input type="radio" name="asistentes" id="asistentes" value="2" checked hidden />
+            <button type="button" class="contador-btn" id="asistentes-menos" aria-label="Una persona menos">−</button>
+            <p class="contador-num"><strong id="asistentes-num">2</strong> <span id="asistentes-txt">personas</span></p>
+            <button type="button" class="contador-btn" id="asistentes-mas" aria-label="Una persona más">+</button>
           </div>
         </div>
 
@@ -246,5 +251,24 @@ const EVENTO = {
 };
 </script>
 <script src="../assets/form.js"></script>
+<script>
+(() => {
+  const MIN = 1, MAX = 10;
+  const radio = document.getElementById('asistentes');
+  const menos = document.getElementById('asistentes-menos');
+  const mas = document.getElementById('asistentes-mas');
+  function poner(n) {
+    n = Math.min(MAX, Math.max(MIN, n));
+    radio.value = String(n);
+    document.getElementById('asistentes-num').textContent = n;
+    document.getElementById('asistentes-txt').textContent = n === 1 ? 'persona' : 'personas';
+    menos.disabled = n === MIN;
+    mas.disabled = n === MAX;
+  }
+  menos.addEventListener('click', () => poner(+radio.value - 1));
+  mas.addEventListener('click', () => poner(+radio.value + 1));
+  poner(+radio.value);
+})();
+</script>
 </body>
 </html>

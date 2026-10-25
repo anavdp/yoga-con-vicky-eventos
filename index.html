@@ -162,11 +162,10 @@ const EVENTOS = [
     emoji: "🥊",
     tipo: "Edición otoño",
     nombre: "Power Bootcamp",
-    fecha: "18 Octubre",
+    fecha: "14 Noviembre",
     hora: "11:00 AM",
     lugar: "El Retiro",
     precio: "40 €",
-    pospuesto: true,
     tema: "otono"
   },
   {
@@ -224,8 +223,10 @@ const diaMes = f => new Date(f + 'T12:00:00Z').toLocaleDateString('es-ES', { day
 
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-// Los pospuestos van al final
-const activos = EVENTOS.filter(e => e.activo).sort((a, b) => !!a.pospuesto - !!b.pospuesto);
+// Ordenados por fecha ("14 Noviembre"); los pospuestos van al final
+const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const orden = e => { const [d, m] = String(e.fecha).toLowerCase().split(/\s+/); return MESES.indexOf(m) * 100 + (parseInt(d) || 0); };
+const activos = EVENTOS.filter(e => e.activo).sort((a, b) => !!a.pospuesto - !!b.pospuesto || orden(a) - orden(b));
 const pasados = EVENTOS.filter(e => !e.activo);
 
 const activeEl = document.getElementById('active');

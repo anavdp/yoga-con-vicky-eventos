@@ -19,6 +19,7 @@
        // opcional: earlyBird: { precio: "15 €", hasta: "2026-10-10" }  (hasta ese día incluido, hora de Madrid)
        // opcional: amiga: "15 €"  (precio por persona si vienen dos amigas)
        // opcional: mensaje: "…"  (texto del pago en el WhatsApp, en lugar del de Bizum o efectivo)
+     finalizado: true,  // opcional: cierra las inscripciones y cambia el formulario por un aviso
      hojaUrl: "https://script.google.com/…/exec"  // opcional: solo eventos con Apps Script propio
    };
 
@@ -90,6 +91,23 @@ function mostrarPrecio() {
   document.querySelectorAll('[data-precio]').forEach(x => { x.textContent = precioActual(); });
 }
 mostrarPrecio();
+
+/* ---------- Evento finalizado ---------- */
+
+// Con "finalizado: true" nadie se puede inscribir: el formulario se cambia por un aviso
+if (EVENTO.finalizado) {
+  $('f-form').style.display = 'none';
+  if ($('f-precio')) $('f-precio').style.display = 'none';
+  const aviso = document.createElement('div');
+  aviso.className = 'success';
+  aviso.style.display = 'block';
+  aviso.innerHTML = `
+    <span class="icon">✨</span>
+    <p class="s-title">Evento finalizado</p>
+    <p class="s-msg">Las inscripciones están cerradas. ¡Gracias a todos los que vinieron! 🧡</p>
+    <p class="s-msg s-mas"><a href="../">Mira los próximos eventos</a></p>`;
+  $('f-form').after(aviso);
+}
 
 /* ---------- Teléfono ---------- */
 

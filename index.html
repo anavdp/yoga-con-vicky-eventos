@@ -151,7 +151,8 @@
    Para añadir un evento: copia un bloque, cambia los datos
    y pon "activo: true". "precio" es opcional. "earlyBird" también:
    { precio: "15 €", hasta: "2026-10-10" } (hasta ese día incluido, hora de Madrid). Para cerrarlo, "activo: false"
-   (pasa automáticamente a "Eventos pasados"). Si se pospone, "pospuesto: true": la tarjeta deja de llevar
+   (pasa automáticamente a "Eventos pasados"; para cerrar también su formulario,
+   pon "finalizado: true" en el EVENTO de su carpeta). Si se pospone, "pospuesto: true": la tarjeta deja de llevar
    al formulario, la fecha pasa a "Próximamente" y sale el aviso "Pospuesto hasta nuevo aviso".
    "carpeta" es el nombre de la carpeta en el repo.
    ========================================================= */
@@ -170,7 +171,7 @@ const EVENTOS = [
   },
   {
     carpeta: "halloween-yoga",
-    activo: true,
+    activo: false,
     emoji: "🎃",
     tipo: "Clase especial",
     nombre: "Halloween Yoga",

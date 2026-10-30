@@ -183,6 +183,7 @@ body { background: var(--page-bg); }
 .success .icon { font-size: 56px; display: block; margin-bottom: 10px; }
 .success .s-title { font-family: 'Bebas Neue', sans-serif; font-size: 44px; color: var(--success-title); margin-bottom: 8px; letter-spacing: 1px; }
 .success .s-msg { color: var(--ink); font-size: 15px; line-height: 1.55; }
+.success .s-mas { margin-top: 16px; }
 .success a { color: var(--accent-strong); font-weight: 700; text-decoration: none; border-bottom: 1.5px solid var(--link-underline); }
 
 .s-box { margin-top: 18px; padding: 14px 16px; border-radius: 16px; background: var(--box-bg); border: 1.5px solid var(--box-border); color: var(--ink); font-size: 14px; line-height: 1.5; text-align: left; }
